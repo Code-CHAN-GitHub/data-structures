@@ -42,6 +42,13 @@ void queueAdd(Queue q, ElementType val);
 ElementType queuePoll(Queue q);
 
 /**
+ * 获取队列头部元素，但不弹出
+ * @param q - 队列
+ * @return val - 元素
+ */
+ElementType queuePeek(Queue q);
+
+/**
  * 打印 queue
  * @param q - 队列
  */

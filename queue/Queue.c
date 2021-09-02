@@ -37,14 +37,14 @@ void queueGrow(Queue q, int minCapacity) {
     q->arr = newArr;
     q->capacity = newCapacity;
     if (oldCapacity > 0) {
-        arrayCopy(oldArr, 0, newArr, 0, q->capacity);
+        arrayCopy(oldArr, 0, newArr, 0, oldCapacity);
         free(oldArr);
     }
 }
 
 void queueAdd(Queue q, ElementType val) {
     if (q->size == q->capacity)
-        queueGrow(q, q->size + 1);
+        queueGrow(q, q->size + 2);
     q->rear = (q->rear + 1) % q->capacity;
     q->arr[q->rear] = val;
     q->size++;
@@ -59,6 +59,14 @@ ElementType queuePoll(Queue q) {
     q->front = (q->front + 1) % q->capacity;
     q->size--;
     return oldVal;
+}
+
+ElementType queuePeek(Queue q) {
+    if (queueIsEmpty(q)) {
+        printf("队列为空!\n");
+        return -1;
+    }
+    return q->arr[q->front];
 }
 
 void printQueue(Queue q) {
