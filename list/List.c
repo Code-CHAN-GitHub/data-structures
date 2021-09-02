@@ -132,6 +132,17 @@ ElementType listGet(List l, int index) {
     return -1;
 }
 
+void listSet(List l, ElementType val, int index) {
+    if (index > listSize(l) || index < 0) {
+        printf("坐标越界!\n");
+    } else if (listIsEmpty(l)) {
+        printf("链遍为空!\n");
+    } else {
+        const PtrToNode node = findNode(l, index);
+        node->val = val;
+    }
+}
+
 ElementType listRemoveLast(List l) {
     if (listIsEmpty(l)) {
         printf("链遍为空!\n");

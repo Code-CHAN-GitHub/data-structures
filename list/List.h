@@ -88,6 +88,14 @@ ElementType listGetLast(List l);
 ElementType listGet(List l, int index);
 
 /**
+ * 根据索引修改对应节点的元素值
+ * @param l - 链表
+ * @param val - 值
+ * @param index - 索引
+ */
+void listSet(List l, ElementType val, int index);
+
+/**
  * 移除尾部节点
  * @param l - 链表
  * @return val - 移除前尾部元素
