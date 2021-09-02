@@ -186,6 +186,15 @@ ElementType listRemoveByIndex(List l, int index) {
     free(node);
 }
 
+ElementType* listToArray(List l) {
+    int a[l->size];
+    PtrToNode p = l->first;
+    for (int i = 0; i < l->size; i++, p = p->next) {
+        a[i] = p->val;
+    }
+    return a;
+}
+
 void printList(List l) {
     if (listIsEmpty(l)) {
         printf("链表为空!\n");

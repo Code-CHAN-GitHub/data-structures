@@ -43,6 +43,8 @@ ElementType listRemoveFirst(List l);
 ElementType listRemove(List l); // 删除头节点
 ElementType listRemoveByIndex(List l, int index);
 
+ElementType* listToArray(List l);
+
 void printList(List l);
 
 #endif //TMP_LIST_H
