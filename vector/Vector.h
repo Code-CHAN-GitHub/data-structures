@@ -17,6 +17,8 @@ typedef struct VectorStruct *Vector;
 Vector createVector();
 Vector createVectorByInitCapacity(int initialCapacity);
 
+int vectorSize(Vector vec);
+
 void vectorAdd(Vector vec, ElementType val);
 void vectorAddByIndex(Vector vec, ElementType val, int index);
 

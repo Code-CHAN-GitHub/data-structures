@@ -32,6 +32,10 @@ Vector createVectorByInitCapacity(int initialCapacity) {
     return vec;
 }
 
+int vectorSize(Vector vec) {
+    return vec->size;
+}
+
 //void arrayCopy(ElementType *src, int srcPos, ElementType *dest, int destPos, int length) {
 //    if (src != dest) {
 //        for (int i = 0; i < length; i++)
@@ -104,6 +108,14 @@ void vectorSet(Vector vec, ElementType val, int index) {
         return;
     }
     vec->data[index] = val;
+}
+
+ElementType* vectorToArray(Vector vec) {
+    if (vec->size == 0)
+        return EMPTY_ELEMENT_DATA;
+    ElementType *arr = (ElementType *) malloc(sizeof(ElementType) * vec->size);
+    arrayCopy(vec->data, 0, arr, 0, vec->size);
+    return arr;
 }
 
 void printVector(Vector vec) {
