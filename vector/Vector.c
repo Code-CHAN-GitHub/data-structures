@@ -85,6 +85,19 @@ ElementType vectorGet(Vector vec, int index) {
     return vec->data[index];
 }
 
+ElementType vectorRemove(Vector vec, int index) {
+    if (index < 0 || index >= vec->size) {
+        printf("下标越界\n");
+        return -1;
+    }
+    int oldVal = vec->data[index];
+    int numMoved = vec->size - index - 1;
+    if (numMoved > 0)
+        arrayCopy(vec->data, index + 1, vec->data, index, numMoved);
+    vec->size--;
+    return oldVal;
+}
+
 void printVector(Vector vec) {
     printf("[");
     for (int i = 0; i < vec->size - 1; i++) {

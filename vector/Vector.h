@@ -21,7 +21,7 @@ void vectorAddByIndex(Vector vec, ElementType val, int index);
 
 ElementType vectorGet(Vector vec, int index);
 
-
+ElementType vectorRemove(Vector vec, int index);
 
 void printVector(Vector vec);
 
