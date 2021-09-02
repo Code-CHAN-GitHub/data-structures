@@ -65,13 +65,33 @@ void listAddFirst(List list, ElementType val) {
     list->size++;
 }
 
+void listAddOnIndex(List list, int index, ElementType val) {
+    if (index > listSize(list) || index < 0) {
+        printf("坐标越界!\n");
+    } else if (index == listSize(list)) {
+        listAddLast(list, val);
+    } else if (index == 0) {
+        listAddFirst(list, val);
+    } else {
+        PtrToNode first = list->first;
+        const PtrToNode dummy = createNode(0, NULL, first);
+        PtrToNode p = dummy;
+        while (index-- > 0) {
+            p = p->next;
+        }
+        const PtrToNode newNode = createNode(0, p, p->next);
+        p->next->prev = newNode;
+        p->next = newNode;
+    }
+}
+
 void printList(List l) {
     if (listIsEmpty(l)) {
-        printf("链表为空!");
+        printf("链表为空!\n");
         return;
     }
     PtrToNode first = l->first;
-    PtrToNode dummy = createNode(0, NULL, first);
+    const PtrToNode dummy = createNode(0, NULL, first);
     PtrToNode p = dummy->next;
     while (p->next != NULL) {
         printf("%d -> ", p->val);

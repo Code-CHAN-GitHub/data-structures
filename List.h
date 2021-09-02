@@ -19,10 +19,14 @@ typedef struct ListStruct *List;
 List createList();
 int listIsEmpty(List l);
 int listSize(List l);
+
+/**
+ * 链表元素插入
+ */
 void listAdd(List list, ElementType val);
 void listAddLast(List list, ElementType val);
 void listAddFirst(List list, ElementType val);
-
+void listAddOnIndex(List list, int index, ElementType val);
 
 void printList(List l);
 
