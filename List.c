@@ -67,6 +67,15 @@ void listAddFirst(List list, ElementType val) {
     list->size++;
 }
 
+PtrToNode findNode(List l, int index) {
+    const PtrToNode first = l->first;
+    PtrToNode p = first;
+    while (index-- > 0) {
+        p = p->next;
+    }
+    return p;
+}
+
 void listAddOnIndex(List list, int index, ElementType val) {
     if (index > listSize(list) || index < 0) {
         printf("坐标越界!\n");
@@ -75,11 +84,7 @@ void listAddOnIndex(List list, int index, ElementType val) {
     } else if (index == 0) {
         listAddFirst(list, val);
     } else {
-        const PtrToNode first = list->first;
-        PtrToNode p = first;
-        while (index-- > 1) {
-            p = p->next;
-        }
+        const PtrToNode p = findNode(list, index - 1);
         const PtrToNode newNode = createNode(val, p, p->next);
         p->next->prev = newNode;
         p->next = newNode;
@@ -117,6 +122,7 @@ ElementType listGet(List l, int index) {
     }
     return -1;
 }
+
 
 
 
