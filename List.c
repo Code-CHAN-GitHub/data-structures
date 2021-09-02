@@ -68,12 +68,20 @@ void listAddFirst(List list, ElementType val) {
 }
 
 PtrToNode findNode(List l, int index) {
-    const PtrToNode first = l->first;
-    PtrToNode p = first;
-    while (index-- > 0) {
-        p = p->next;
+    if (index >= l->size || index < 0)
+        return NULL;
+
+    if (index < (l->size >> 1)) {
+        PtrToNode p = l->first;
+        for (int i = 0; i < index; i++)
+            p = p->next;
+        return p;
+    } else {
+        PtrToNode p = l->last;
+        for (int i = l->size - 1; i > index; i--)
+            p = p->prev;
+        return p;
     }
-    return p;
 }
 
 void listAddOnIndex(List list, int index, ElementType val) {
@@ -84,10 +92,11 @@ void listAddOnIndex(List list, int index, ElementType val) {
     } else if (index == 0) {
         listAddFirst(list, val);
     } else {
-        const PtrToNode p = findNode(list, index - 1);
+        const PtrToNode p = findNode(list, index);
         const PtrToNode newNode = createNode(val, p, p->next);
-        p->next->prev = newNode;
-        p->next = newNode;
+        p->prev->next = newNode;
+        p->prev = newNode;
+        list->size++;
     }
 }
 
@@ -123,8 +132,59 @@ ElementType listGet(List l, int index) {
     return -1;
 }
 
+ElementType listRemoveLast(List l) {
+    if (listIsEmpty(l)) {
+        printf("链遍为空!\n");
+        return -1;
+    }
+    const PtrToNode last = l->last;
+    const ElementType val = last->val;
+    l->last = last->prev;
+    if (l->last == NULL)
+        l->first = NULL;
+    else
+        l->last->next = NULL;
+    l->size--;
+    const PtrToNode tmp = last;
+    free(last);
+    return val;
+}
 
+ElementType listRemoveFirst(List l) {
+    if (listIsEmpty(l)) {
+        printf("链表为空!\n");
+        return -1;
+    }
+    const PtrToNode first = l->first;
+    const ElementType val = first->val;
+    l->first = first->next;
+    if (l->first == NULL)
+        l->last = NULL;
+    else
+        l->first->prev = NULL;
+    l->size--;
+    return val;
+}
 
+ElementType listRemove(List l) {
+    return listRemoveFirst(l);
+}
+
+ElementType listRemoveByIndex(List l, int index) {
+    if (index >= l->size || index < 0) {
+        printf("下标越界!\n");
+        return -1;
+    } else if (index == 0) {
+        return listRemoveFirst(l);
+    } else if (index == l->size - 1) {
+        return listRemoveLast(l);
+    }
+    const PtrToNode node =findNode(l, index);
+    node->prev->next = node->next;
+    node->next->prev = node->prev;
+    l->size--;
+    free(node);
+}
 
 void printList(List l) {
     if (listIsEmpty(l)) {

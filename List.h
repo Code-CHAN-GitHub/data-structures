@@ -35,6 +35,14 @@ ElementType listGetFirst(List l);
 ElementType listGetLast(List l);
 ElementType listGet(List l, int index);
 
+/**
+ * 链表元素删除
+ */
+ElementType listRemoveLast(List l);
+ElementType listRemoveFirst(List l);
+ElementType listRemove(List l); // 删除头节点
+ElementType listRemoveByIndex(List l, int index);
+
 void printList(List l);
 
 #endif //TMP_LIST_H
