@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "../util/Arrays.h"
 
 typedef int ElementType;
 
@@ -24,6 +25,8 @@ ElementType vectorGet(Vector vec, int index);
 ElementType vectorRemove(Vector vec, int index);
 
 void vectorSet(Vector vec, ElementType val, int index);
+
+ElementType* vectorToArray(Vector vec);
 
 void printVector(Vector vec);
 
