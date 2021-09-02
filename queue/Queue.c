@@ -23,6 +23,10 @@ Queue createQueue() {
     return q;
 }
 
+int queueIsEmpty(Queue q) {
+    return q->size == 0;
+}
+
 void queueGrow(Queue q, int minCapacity) {
     int oldCapacity = q->capacity;
     int newCapacity = oldCapacity + (oldCapacity >> 1);
@@ -46,12 +50,23 @@ void queueAdd(Queue q, ElementType val) {
     q->size++;
 }
 
+ElementType queuePoll(Queue q) {
+    if (queueIsEmpty(q)) {
+        printf("队列为空!\n");
+        return -1;
+    }
+    ElementType oldVal = q->arr[q->front];
+    q->front = (q->front + 1) % q->capacity;
+    q->size--;
+    return oldVal;
+}
+
 void printQueue(Queue q) {
     printf("[");
     for (int i = 0; i < q->size - 1; i++) {
-        printf("%d, ", q->arr[(q->front + i) % q->size]);
+        printf("%d, ", q->arr[(q->front + i) % q->capacity]);
     }
     if (q->size > 0)
-        printf("%d", q->arr[(q->front + q->size - 1) % q->size]);
+        printf("%d", q->arr[(q->front + q->size - 1) % q->capacity]);
     printf("]\n");
 }

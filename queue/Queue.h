@@ -21,11 +21,25 @@ typedef struct QueueStruct *Queue;
 Queue createQueue();
 
 /**
+ * 判断队列是否为空
+ * @param q - 队列
+ * @return 0 为非空，1 为空
+ */
+int queueIsEmpty(Queue q);
+
+/**
  * 向队列尾部添加元素
  * @param q - 队列
  * @param val - 元素
  */
 void queueAdd(Queue q, ElementType val);
+
+/**
+ * 弹出队列头部元素
+ * @param q - 队列
+ * @return val 元素
+ */
+ElementType queuePoll(Queue q);
 
 /**
  * 打印 queue
