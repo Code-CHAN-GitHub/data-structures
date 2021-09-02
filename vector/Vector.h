@@ -23,6 +23,8 @@ ElementType vectorGet(Vector vec, int index);
 
 ElementType vectorRemove(Vector vec, int index);
 
+void vectorSet(Vector vec, ElementType val, int index);
+
 void printVector(Vector vec);
 
 #endif //DATA_STRUCTURES_VECTOR_H

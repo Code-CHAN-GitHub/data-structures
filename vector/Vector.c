@@ -98,6 +98,14 @@ ElementType vectorRemove(Vector vec, int index) {
     return oldVal;
 }
 
+void vectorSet(Vector vec, ElementType val, int index) {
+    if (index < 0 || index >= vec->size) {
+        printf("下标越界\n");
+        return;
+    }
+    vec->data[index] = val;
+}
+
 void printVector(Vector vec) {
     printf("[");
     for (int i = 0; i < vec->size - 1; i++) {
