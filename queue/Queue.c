@@ -16,8 +16,42 @@ ElementType EMPTY_ARR[];
 
 Queue createQueue() {
     Queue q = (Queue) malloc(sizeof(struct QueueStruct));
-    q->front = -1;
+    q->size = q->capacity = 0;
+    q->front = 0;
     q->rear = -1;
     q->arr = EMPTY_ARR;
     return q;
+}
+
+void queueGrow(Queue q, int minCapacity) {
+    int oldCapacity = q->capacity;
+    int newCapacity = oldCapacity + (oldCapacity >> 1);
+    if (newCapacity < minCapacity)
+        newCapacity = minCapacity;
+    ElementType *oldArr = q->arr;
+    ElementType *newArr = (ElementType *) malloc(sizeof(ElementType) * newCapacity);
+    q->arr = newArr;
+    q->capacity = newCapacity;
+    if (oldCapacity > 0) {
+        arrayCopy(oldArr, 0, newArr, 0, q->capacity);
+        free(oldArr);
+    }
+}
+
+void queueAdd(Queue q, ElementType val) {
+    if (q->size == q->capacity)
+        queueGrow(q, q->size + 1);
+    q->rear = (q->rear + 1) % q->capacity;
+    q->arr[q->rear] = val;
+    q->size++;
+}
+
+void printQueue(Queue q) {
+    printf("[");
+    for (int i = 0; i < q->size - 1; i++) {
+        printf("%d, ", q->arr[(q->front + i) % q->size]);
+    }
+    if (q->size > 0)
+        printf("%d", q->arr[(q->front + q->size - 1) % q->size]);
+    printf("]\n");
 }
