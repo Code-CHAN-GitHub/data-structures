@@ -166,10 +166,6 @@ ElementType listRemoveFirst(List l) {
     return val;
 }
 
-ElementType listRemove(List l) {
-    return listRemoveFirst(l);
-}
-
 ElementType listRemoveByIndex(List l, int index) {
     if (index >= l->size || index < 0) {
         printf("下标越界!\n");
