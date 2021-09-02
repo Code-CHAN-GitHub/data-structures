@@ -28,6 +28,13 @@ void listAddLast(List list, ElementType val);
 void listAddFirst(List list, ElementType val);
 void listAddOnIndex(List list, int index, ElementType val);
 
+/**
+ * 链表元素获取
+ */
+ElementType listGetFirst(List l);
+ElementType listGetLast(List l);
+ElementType listGet(List l, int index);
+
 void printList(List l);
 
 #endif //TMP_LIST_H

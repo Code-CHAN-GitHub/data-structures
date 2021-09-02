@@ -31,7 +31,13 @@ List createList() {
     return list;
 }
 
+int listIsEmpty(List l) {
+    return l == NULL || l->size == 0;
+}
+
 int listSize(List l) {
+    if (listIsEmpty(l))
+        return 0;
     return l->size;
 }
 
@@ -48,10 +54,6 @@ void listAddLast(List list, ElementType val) {
 
 void listAdd(List list, ElementType val) {
     listAddLast(list, val);
-}
-
-int listIsEmpty(List l) {
-    return l == NULL || l->size == 0;
 }
 
 void listAddFirst(List list, ElementType val) {
@@ -73,17 +75,50 @@ void listAddOnIndex(List list, int index, ElementType val) {
     } else if (index == 0) {
         listAddFirst(list, val);
     } else {
-        PtrToNode first = list->first;
-        const PtrToNode dummy = createNode(0, NULL, first);
-        PtrToNode p = dummy;
-        while (index-- > 0) {
+        const PtrToNode first = list->first;
+        PtrToNode p = first;
+        while (index-- > 1) {
             p = p->next;
         }
-        const PtrToNode newNode = createNode(0, p, p->next);
+        const PtrToNode newNode = createNode(val, p, p->next);
         p->next->prev = newNode;
         p->next = newNode;
     }
 }
+
+ElementType listGetFirst(List l) {
+    if (listIsEmpty(l)) {
+        printf("链表为空!\n");
+        return -1;
+    }
+    return l->first->val;
+}
+
+ElementType listGetLast(List l) {
+    if (listIsEmpty(l)) {
+        printf("链遍为空!\n");
+        return -1;
+    }
+    return l->last->val;
+}
+
+ElementType listGet(List l, int index) {
+    if (index > listSize(l) || index < 0) {
+        printf("坐标越界!\n");
+    } else if (listIsEmpty(l)) {
+        printf("链遍为空!\n");
+    } else {
+        const PtrToNode first = l->first;
+        PtrToNode p = first;
+        while (index-- > 0) {
+            p = p->next;
+        }
+        return p->val;
+    }
+    return -1;
+}
+
+
 
 void printList(List l) {
     if (listIsEmpty(l)) {
@@ -98,6 +133,7 @@ void printList(List l) {
         p = p->next;
     }
     printf("%d\n", p->val);
+    free(dummy);
 }
 
 
