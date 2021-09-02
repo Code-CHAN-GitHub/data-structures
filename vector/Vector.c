@@ -77,6 +77,14 @@ void vectorAddByIndex(Vector vec, ElementType val, int index) {
     vec->size++;
 }
 
+ElementType vectorGet(Vector vec, int index) {
+    if (index < 0 || index >= vec->size) {
+        printf("下标越界\n");
+        return -1;
+    }
+    return vec->data[index];
+}
+
 void printVector(Vector vec) {
     printf("[");
     for (int i = 0; i < vec->size - 1; i++) {

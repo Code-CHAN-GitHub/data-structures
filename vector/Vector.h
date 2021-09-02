@@ -19,6 +19,8 @@ Vector createVectorByInitCapacity(int initialCapacity);
 void vectorAdd(Vector vec, ElementType val);
 void vectorAddByIndex(Vector vec, ElementType val, int index);
 
+ElementType vectorGet(Vector vec, int index);
+
 
 
 void printVector(Vector vec);
