@@ -14,9 +14,13 @@ typedef struct HeapStruct *Heap;
 
 /**
  * 返回一个空的堆
- * @return
  */
 Heap createHeap();
+
+/**
+ * 判断堆是否为空
+ */
+int heapIsEmpty(Heap heap);
 
 /**
  * 将元素压入堆中
@@ -25,9 +29,13 @@ void heapAdd(Heap heap, int val);
 
 /**
  * 获取堆顶的元素，并不删除
- * @param heap
  */
 int heapPeek(Heap heap);
+
+/**
+ * 弹出堆顶元素
+ */
+int heapPoll(Heap heap);
 
 void printHeap(Heap heap);
 

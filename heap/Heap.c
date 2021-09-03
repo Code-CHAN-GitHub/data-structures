@@ -19,6 +19,10 @@ Heap createHeap() {
     return heap;
 }
 
+int heapIsEmpty(Heap heap) {
+    return heap->size == 0;
+}
+
 void heapGrow(Heap heap, int minCapacity) {
     int oldCapacity = heap->capacity;
     int newCapacity = oldCapacity + ((oldCapacity < 64) ?
@@ -46,11 +50,32 @@ void heapAdd(Heap heap, int val) {
 }
 
 int heapPeek(Heap heap) {
-    if (heap->size == 0) {
+    if (heapIsEmpty(heap)) {
         printf("堆为空!\n");
         return -1;
     }
     return heap->data[1];
+}
+
+int heapPoll(Heap heap) {
+    if (heapIsEmpty(heap)) {
+        printf("堆为空!\n");
+        return -1;
+    }
+    int min = heap->data[1];
+    int last = heap->data[heap->size--];
+    int i, child;
+    for (i = 1; i * 2 <= heap->size; i = child) {
+        child = i * 2;
+        if (child < heap->size && heap->data[child + 1] < heap->data[child])
+            child++;
+        if (last > heap->data[child])
+            heap->data[i] = heap->data[child];
+        else
+            break;
+    }
+    heap->data[i] = last;
+    return min;
 }
 
 void printHeap(Heap heap) {
