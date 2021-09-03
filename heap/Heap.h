@@ -23,6 +23,12 @@ Heap createHeap();
  */
 void heapAdd(Heap heap, int val);
 
+/**
+ * 获取堆顶的元素，并不删除
+ * @param heap
+ */
+int heapPeek(Heap heap);
+
 void printHeap(Heap heap);
 
 #endif //DATA_STRUCTURES_HEAP_H

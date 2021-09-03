@@ -45,6 +45,14 @@ void heapAdd(Heap heap, int val) {
     heap->data[i] = val;
 }
 
+int heapPeek(Heap heap) {
+    if (heap->size == 0) {
+        printf("堆为空!\n");
+        return -1;
+    }
+    return heap->data[1];
+}
+
 void printHeap(Heap heap) {
     printf("[");
     for (int i = 1; i < heap->size; i++)
