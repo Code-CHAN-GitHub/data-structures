@@ -16,3 +16,13 @@ void arrayCopy(ElementType *src, int srcPos, ElementType *dest, int destPos, int
             dest[destPos + i] = tmp[i];
     }
 }
+
+void arrayPrint(ElementType *arr, int start, int end) {
+    printf("[");
+    for (int i = start; i <= end - 1; i++) {
+        printf("%d, ", arr[i]);
+    }
+    if (end - start + 1 > 0)
+        printf("%d", arr[end]);
+    printf("]\n");
+}

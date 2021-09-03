@@ -12,5 +12,6 @@ typedef int ElementType;
 
 void arrayCopy(ElementType *src, int srcPos, ElementType *dest, int destPos, int length);
 
+void arrayPrint(ElementType *arr, int start, int end);
 
 #endif //DATA_STRUCTURES_ARRAYS_H
