@@ -32,14 +32,14 @@ int media3(int *arr, int left, int right) {
     return arr[right - 1]; /* return pivot */
 }
 
-#define CUTOFF (15)
+#define CUTOFF (15) /* 插入排序截止范围 */
 
 void quickSort(ElementType *arr, int left, int right) {
     /*
-     * 如果长度小于 CUTOFF 则使用归并排序
+     * 如果长度小于 CUTOFF 则使用插入排序
      */
     if (left + CUTOFF > right) {
-        mergeSort(arr, left, right);
+        insertionSort(arr, left, right);
         return;
     }
 
@@ -95,4 +95,58 @@ void mergeSort(ElementType *arr, int left, int right) {
     int *tmpArr = (int *) malloc(sizeof(int ) * len);
     mergeSortHelper(arr, tmpArr, left, right);
     free(tmpArr);
+}
+
+void insertionSort(ElementType *arr, int left, int right) {
+    if (left >= right)
+        return;
+    for (int i = left + 1; i <= right; i++) {
+        int j, tmp = arr[i];
+        for (j = i; j > left && arr[j - 1] > tmp; j--)
+            arr[j] = arr[j - 1];
+        arr[j] = tmp;
+    }
+}
+
+/*
+ * 获取希尔排序过程中用到的 Hibbard 增量序列
+ */
+int* getHibbardStepArr(int n, int *arrSize) {
+    int i = 1;
+    while (1) {
+        int t = (1 << i) - 1;
+        if (t >= n)
+            break;
+        (*arrSize)++;
+        i++;
+    }
+    int *res = (int *) malloc(sizeof(int) * (*arrSize));
+    i = 1;
+    while (1) {
+        int t = (1 << i) - 1;
+        if (t >= n)
+            break;
+        res[i - 1] = t;
+        i++;
+    }
+    return res;
+}
+
+void shellSort(ElementType *arr, int left, int right) {
+    if (left >= right)
+        return;
+
+    int len = right - left + 1;
+    int arrSize = 0;
+    int *stepArr = getHibbardStepArr(len, &arrSize);
+    for (int k = arrSize - 1; k >= 0; k--) {
+        int increment = stepArr[k];
+        for (int i = increment; i <= right; i += increment) {
+            int j, tmp = arr[i];
+            for (j = i; j >= increment + left && arr[j - increment] > tmp; j -= increment)
+                arr[j] = arr[j - increment];
+            arr[j] = tmp;
+        }
+    }
+    free(stepArr);
 }
