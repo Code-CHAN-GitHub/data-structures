@@ -57,3 +57,41 @@ void quickSort(ElementType *arr, int left, int right) {
     quickSort(arr, left, i - 1);
     quickSort(arr, i + 1, right);
 }
+
+/**
+ * 归并排序的实现
+ * @param arr
+ * @param tmpArr
+ * @param left
+ * @param right
+ */
+void mergeSortHelper(ElementType *arr, ElementType *tmpArr, int left, int right) {
+    if (left >= right)
+        return;
+
+    /* divide */
+    int mid = left + ((right - left) >> 1);
+    mergeSortHelper(arr, tmpArr, left, mid);
+    mergeSortHelper(arr, tmpArr, mid + 1, right);
+
+    /* merge */
+    int i = left, j = mid + 1, k = 0;
+    while (i <= mid && j <= right)
+        if (arr[i] < arr[j])
+            tmpArr[k++] = arr[i++];
+        else
+            tmpArr[k++] = arr[j++];
+    while (i <= mid)
+        tmpArr[k++] = arr[i++];
+    while (j <= right)
+        tmpArr[k++] = arr[j++];
+
+    arrayCopy(tmpArr, 0, arr, left, right - left + 1);
+}
+
+void mergeSort(ElementType *arr, int left, int right) {
+    int len = right - left + 1;
+    int *tmpArr = (int *) malloc(sizeof(int ) * len);
+    mergeSortHelper(arr, tmpArr, left, right);
+    free(tmpArr);
+}
