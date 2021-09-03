@@ -29,4 +29,9 @@ void insertionSort(ElementType *arr, int left, int right);
  * 希尔排序
  */
 void shellSort(ElementType *arr, int left, int right);
+
+/*
+ * 堆排序
+ */
+void heapSort(ElementType *arr, int n);
 #endif //DATA_STRUCTURES_SORT_H

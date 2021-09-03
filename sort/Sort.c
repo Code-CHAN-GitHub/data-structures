@@ -150,3 +150,30 @@ void shellSort(ElementType *arr, int left, int right) {
     }
     free(stepArr);
 }
+
+/**
+ * 堆排序下浮操作
+ */
+void shiftDown(ElementType *arr, int i, int n) {
+    int tmp = arr[i], child;
+    for (; i * 2 + 1 < n; i = child) {
+        child = i * 2 + 1;
+        if (child < n - 1 && arr[child + 1] > arr[child])
+            child++;
+        if (tmp < arr[child])
+            arr[i] = arr[child];
+        else
+            break;
+    }
+    arr[i] = tmp;
+}
+
+void heapSort(ElementType *arr, int n) {
+    int i;
+    for (i = n / 2; i >= 0; i--) /* build heap */
+        shiftDown(arr, i, n);
+    for (i = n - 1; i > 0; i--) {
+        swap(&arr[0], &arr[i]); /* poll max to last */
+        shiftDown(arr, 0, i);
+    }
+}
