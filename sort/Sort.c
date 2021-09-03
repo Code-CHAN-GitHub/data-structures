@@ -32,13 +32,14 @@ int media3(int *arr, int left, int right) {
     return arr[right - 1]; /* return pivot */
 }
 
+#define CUTOFF (15)
+
 void quickSort(ElementType *arr, int left, int right) {
-    if (left >= right)
-        return;
-    if (left + 1 == right) {
-        int a = arr[left] > arr[right] ? arr[left] : arr[right];
-        int b = arr[left] > arr[right] ? arr[right] : arr[left];
-        arr[left] = b; arr[right] = a;
+    /*
+     * 如果长度小于 CUTOFF 则使用归并排序
+     */
+    if (left + CUTOFF > right) {
+        mergeSort(arr, left, right);
         return;
     }
 
