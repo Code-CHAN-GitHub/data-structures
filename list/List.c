@@ -1,222 +1,197 @@
-//
-// Created by chen on 2021/8/31.
-//
-
 #include "List.h"
 
-struct Node {
-    ElementType val;
-    PtrToNode prev;
-    PtrToNode next;
+typedef struct ListNode ListNode;
+struct ListNode {
+    void *item;
+    ListNode *prev;
+    ListNode *next;
 };
 
-struct ListStruct {
+struct List {
     int size;
-    PtrToNode first;
-    PtrToNode last;
+    ListNode *first;
+    ListNode *last;
 };
 
-PtrToNode createNode(ElementType val, PtrToNode prev, PtrToNode next) {
-    PtrToNode newNode = (PtrToNode) malloc(sizeof(struct Node));
-    newNode->val = val;
-    newNode->prev = prev;
-    newNode->next = next;
-    return newNode;
+/*
+ * 创建 ListNode
+ */
+ListNode *createListNode(void *item, ListNode *prev, ListNode *next);
+
+/*
+ * 根据索引查找 ListNode
+ */
+ListNode *findListNode(List *l, int index);
+
+/*
+ * 判断是否为 list 的索引
+ */
+int isListIndex(List *l, int index);
+
+
+List *createList() {
+    List *l = (List*) malloc(sizeof(List));
+    l->size = 0;
+    l->first = l->last = NULL;
+    return l;
 }
 
-List createList() {
-    List list = (List) malloc(sizeof(struct ListStruct));
-    list->size = 0;
-    list->first = list->last = NULL;
-    return list;
+int listIsEmpty(List *l) {
+    assert(l);
+    return l->size == 0;
 }
 
-int listIsEmpty(List l) {
-    return l == NULL || l->size == 0;
+int listSize(List *l) {
+    if (!listIsEmpty(l))
+        return l->size;
+    return 0;
 }
 
-int listSize(List l) {
-    if (listIsEmpty(l))
-        return 0;
-    return l->size;
-}
-
-void listAddLast(List list, ElementType val) {
-    const PtrToNode last = list->last;
-    const PtrToNode newNode = createNode(val, last, NULL);
-    list->last = newNode;
+void listAddLast(List *l, void *item) {
+    ListNode *last = l->last;
+    ListNode *newNode = createListNode(item, last, NULL);
+    l->last = newNode;
     if (last == NULL)
-        list->first = newNode;
+        l->first = newNode;
     else
         last->next = newNode;
-    list->size++;
+    l->size++;
 }
 
-void listAdd(List list, ElementType val) {
-    listAddLast(list, val);
+void listAdd(List *l, void *item) {
+    listAddLast(l, item);
 }
 
-void listAddFirst(List list, ElementType val) {
-    const PtrToNode first = list->first;
-    const PtrToNode newNode = createNode(val, NULL, first);
-    list->first = newNode;
+void listAddFirst(List *l, void *item) {
+    ListNode *first = l->first;
+    ListNode *newNode = createListNode(item, NULL, first);
+    l->first = newNode;
     if (first == NULL)
-        list->last = newNode;
+        l->last = newNode;
     else
         first->prev = newNode;
-    list->size++;
+    l->size++;
 }
 
-PtrToNode findNode(List l, int index) {
-    if (index >= l->size || index < 0)
-        return NULL;
+void listAddOnIndex(List *l, int index, void *item) {
+    // 此处不用 isListIndex 判断，因为可以向 index == listSize (即尾部) 添加元素
+    assert(l != NULL && index >= 0 && index <= listSize(l));
 
-    if (index < (l->size >> 1)) {
-        PtrToNode p = l->first;
-        for (int i = 0; i < index; i++)
-            p = p->next;
-        return p;
-    } else {
-        PtrToNode p = l->last;
-        for (int i = l->size - 1; i > index; i--)
-            p = p->prev;
-        return p;
-    }
-}
-
-void listAddOnIndex(List list, int index, ElementType val) {
-    if (index > listSize(list) || index < 0) {
-        printf("坐标越界!\n");
-    } else if (index == listSize(list)) {
-        listAddLast(list, val);
+    if (index == listSize(l)) {
+        listAddLast(l, item);
     } else if (index == 0) {
-        listAddFirst(list, val);
+        listAddFirst(l, item);
     } else {
-        const PtrToNode p = findNode(list, index);
-        const PtrToNode newNode = createNode(val, p, p->next);
+        ListNode *p = findListNode(l, index);
+        ListNode *newNode = createListNode(item, p, p->next);
         p->prev->next = newNode;
         p->prev = newNode;
-        list->size++;
+        l->size++;
     }
 }
 
-ElementType listGetFirst(List l) {
-    if (listIsEmpty(l)) {
-        printf("链表为空!\n");
-        return -1;
-    }
-    return l->first->val;
+void *listGetFirst(List *l) {
+    if (!listIsEmpty(l))
+        return l->first->item;
+    return NULL;
 }
 
-ElementType listGetLast(List l) {
-    if (listIsEmpty(l)) {
-        printf("链遍为空!\n");
-        return -1;
-    }
-    return l->last->val;
+void *listGetLast(List *l) {
+    if (!listIsEmpty(l))
+        return l->last->item;
+    return NULL;
 }
 
-ElementType listGet(List l, int index) {
-    if (index > listSize(l) || index < 0) {
-        printf("坐标越界!\n");
-    } else if (listIsEmpty(l)) {
-        printf("链遍为空!\n");
-    } else {
-        const PtrToNode first = l->first;
-        PtrToNode p = first;
-        while (index-- > 0) {
-            p = p->next;
-        }
-        return p->val;
+void *listGet(List *l, int index) {
+    assert(l != NULL && isListIndex(l, index));
+
+    ListNode *first = l->first;
+    ListNode *p = first;
+    while (index-- > 0) {
+        p = p->next;
     }
-    return -1;
+    return p->item;
 }
 
-void listSet(List l, ElementType val, int index) {
-    if (index > listSize(l) || index < 0) {
-        printf("坐标越界!\n");
-    } else if (listIsEmpty(l)) {
-        printf("链遍为空!\n");
-    } else {
-        const PtrToNode node = findNode(l, index);
-        node->val = val;
-    }
+void listSet(List *l, int index, void *item) {
+    assert(l != NULL && isListIndex(l, index));
+
+    ListNode *node = findListNode(l, index);
+    node->item = item;
 }
 
-ElementType listRemoveLast(List l) {
-    if (listIsEmpty(l)) {
-        printf("链遍为空!\n");
-        return -1;
-    }
-    const PtrToNode last = l->last;
-    const ElementType val = last->val;
+void *listRemoveLast(List *l) {
+    assert(l != NULL && !listIsEmpty(l));
+
+    ListNode *last = l->last;
+    void *item = last->item;
     l->last = last->prev;
     if (l->last == NULL)
         l->first = NULL;
     else
         l->last->next = NULL;
     l->size--;
-    const PtrToNode tmp = last;
+    ListNode *tmp = last;
     free(last);
-    return val;
+    return item;
 }
 
-ElementType listRemoveFirst(List l) {
-    if (listIsEmpty(l)) {
-        printf("链表为空!\n");
-        return -1;
-    }
-    const PtrToNode first = l->first;
-    const ElementType val = first->val;
+void *listRemoveFirst(List *l) {
+    assert(l != NULL && !listIsEmpty(l));
+
+    ListNode *first = l->first;
+    ListNode *item = first->item;
     l->first = first->next;
     if (l->first == NULL)
         l->last = NULL;
     else
         l->first->prev = NULL;
     l->size--;
-    return val;
+    return item;
 }
 
-ElementType listRemoveByIndex(List l, int index) {
-    if (index >= l->size || index < 0) {
-        printf("下标越界!\n");
-        return -1;
-    } else if (index == 0) {
+void *listRemove(List *l, int index) {
+    assert(l != NULL && isListIndex(l, index));
+
+    if (index == 0) {
         return listRemoveFirst(l);
     } else if (index == l->size - 1) {
         return listRemoveLast(l);
     }
-    const PtrToNode node =findNode(l, index);
+    ListNode *node = findListNode(l, index);
+    void *item = node->item;
     node->prev->next = node->next;
     node->next->prev = node->prev;
     l->size--;
     free(node);
+    return item;
 }
 
-ElementType* listToArray(List l) {
-    int a[l->size];
-    PtrToNode p = l->first;
-    for (int i = 0; i < l->size; i++, p = p->next) {
-        a[i] = p->val;
-    }
-    return a;
+ListNode *createListNode(void *item, ListNode *prev, ListNode *next) {
+    ListNode *newNode = (ListNode *) malloc(sizeof(ListNode));
+    newNode->item = item;
+    newNode->prev = prev;
+    newNode->next = next;
+    return newNode;
 }
 
-void printList(List l) {
-    if (listIsEmpty(l)) {
-        printf("链表为空!\n");
-        return;
+ListNode *findListNode(List *l, int index) {
+    // 双向链表查找最坏情况时间复杂度为 O(N/2)
+    if (index < (l->size >> 1)) {
+        ListNode *p = l->first;
+        for (int i = 0; i < index; i++)
+            p = p->next;
+        return p;
+    } else {
+        ListNode *p = l->last;
+        for (int i = l->size - 1; i > index; i--)
+            p = p->prev;
+        return p;
     }
-    PtrToNode first = l->first;
-    const PtrToNode dummy = createNode(0, NULL, first);
-    PtrToNode p = dummy->next;
-    while (p->next != NULL) {
-        printf("%d -> ", p->val);
-        p = p->next;
-    }
-    printf("%d\n", p->val);
-    free(dummy);
 }
 
+int isListIndex(List *l, int index) {
+    return index >= 0 && index < l->size;
+}
 
 
