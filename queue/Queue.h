@@ -7,51 +7,40 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../util/Arrays.h"
+#include <assert.h>
 
 typedef int ElementType;
 
-struct QueueStruct;
-typedef struct QueueStruct *Queue;
+typedef struct Queue Queue;
 
 /**
  * 获取一个空队列
- * @return queue - 队列
  */
-Queue createQueue();
+Queue *createQueue();
+
+/*
+ * 队列大小
+ */
+int queueSize(Queue *q);
 
 /**
  * 判断队列是否为空
- * @param q - 队列
- * @return 0 为非空，1 为空
  */
-int queueIsEmpty(Queue q);
+int queueIsEmpty(Queue *q);
 
 /**
  * 向队列尾部添加元素
- * @param q - 队列
- * @param val - 元素
  */
-void queueAdd(Queue q, ElementType val);
+void queueAdd(Queue *q, void *item);
 
 /**
  * 弹出队列头部元素
- * @param q - 队列
- * @return val 元素
  */
-ElementType queuePoll(Queue q);
+void *queuePoll(Queue *q);
 
 /**
  * 获取队列头部元素，但不弹出
- * @param q - 队列
- * @return val - 元素
  */
-ElementType queuePeek(Queue q);
-
-/**
- * 打印 queue
- * @param q - 队列
- */
-void printQueue(Queue q);
+void *queuePeek(Queue *q);
 
 #endif //DATA_STRUCTURES_QUEUE_H

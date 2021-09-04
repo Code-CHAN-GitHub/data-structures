@@ -4,45 +4,39 @@
 
 #include "Queue.h"
 
-struct QueueStruct {
+struct Queue {
     int front;
     int rear;
     int size;
     int capacity;
-    ElementType *arr;
+    void **arr;
 };
 
-ElementType EMPTY_ARR[];
+/*
+ * 队列扩容
+ */
+void queueGrow(Queue *q, int minCapacity);
 
-Queue createQueue() {
-    Queue q = (Queue) malloc(sizeof(struct QueueStruct));
+Queue *createQueue() {
+    Queue *q = (Queue*) malloc(sizeof(Queue));
     q->size = q->capacity = 0;
     q->front = 0;
     q->rear = -1;
-    q->arr = EMPTY_ARR;
+    q->arr = NULL;
     return q;
 }
 
-int queueIsEmpty(Queue q) {
+int queueSize(Queue *q) {
+    return q->size;
+}
+
+int queueIsEmpty(Queue *q) {
+    assert(q);
+
     return q->size == 0;
 }
 
-void queueGrow(Queue q, int minCapacity) {
-    int oldCapacity = q->capacity;
-    int newCapacity = oldCapacity + (oldCapacity >> 1);
-    if (newCapacity < minCapacity)
-        newCapacity = minCapacity;
-    ElementType *oldArr = q->arr;
-    ElementType *newArr = (ElementType *) malloc(sizeof(ElementType) * newCapacity);
-    q->arr = newArr;
-    q->capacity = newCapacity;
-    if (oldCapacity > 0) {
-        arrayCopy(oldArr, 0, newArr, 0, oldCapacity);
-        free(oldArr);
-    }
-}
-
-void queueAdd(Queue q, ElementType val) {
+void queueAdd(Queue *q, void *val) {
     if (q->size == q->capacity)
         queueGrow(q, q->size + 2);
     q->rear = (q->rear + 1) % q->capacity;
@@ -50,31 +44,41 @@ void queueAdd(Queue q, ElementType val) {
     q->size++;
 }
 
-ElementType queuePoll(Queue q) {
-    if (queueIsEmpty(q)) {
-        printf("队列为空!\n");
-        return -1;
+void *queuePoll(Queue *q) {
+    if (!queueIsEmpty(q)) {
+        void *item = q->arr[q->front];
+        q->front = (q->front + 1) % q->capacity;
+        q->size--;
+        return item;
     }
-    ElementType oldVal = q->arr[q->front];
-    q->front = (q->front + 1) % q->capacity;
-    q->size--;
-    return oldVal;
+    return NULL;
 }
 
-ElementType queuePeek(Queue q) {
-    if (queueIsEmpty(q)) {
-        printf("队列为空!\n");
-        return -1;
+void *queuePeek(Queue *q) {
+    if (!queueIsEmpty(q)) {
+        return q->arr[q->front];
     }
-    return q->arr[q->front];
+    return NULL;
 }
 
-void printQueue(Queue q) {
-    printf("[");
-    for (int i = 0; i < q->size - 1; i++) {
-        printf("%d, ", q->arr[(q->front + i) % q->capacity]);
+void queueGrow(Queue *q, int minCapacity) {
+    int oldCapacity = q->capacity;
+    int newCapacity = oldCapacity + (oldCapacity >> 1);
+    if (newCapacity < minCapacity)
+        newCapacity = minCapacity;
+    void **oldArr = q->arr;
+    void **newArr = (void *) malloc(sizeof(void *) * newCapacity);
+    q->arr = newArr;
+    q->capacity = newCapacity;
+    if (q->size > 0) {
+        int i = q->front, t = 0;
+        while (i != q->rear) {
+            newArr[t++] = oldArr[i];
+            i = (i + 1) % oldCapacity;
+        }
+        newArr[t] = oldArr[i];
+        q->front = 0;
+        q->rear = q->size - 1;
+        free(oldArr);
     }
-    if (q->size > 0)
-        printf("%d", q->arr[(q->front + q->size - 1) % q->capacity]);
-    printf("]\n");
 }
