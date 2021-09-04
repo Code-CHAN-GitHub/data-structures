@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "../util/Math.h"
 
 typedef int ElementType;
 
@@ -27,4 +28,13 @@ AvlTree createAvlTree();
  */
 int avlIsEmpty(AvlTree avl);
 
+/*
+ * 向树中添加元素
+ */
+void avlAdd(AvlTree avl, ElementType val);
+
+/*
+ * 打印树
+ */
+void printAvl(AvlTree avl);
 #endif //DATA_STRUCTURES_AVLTREE_H
