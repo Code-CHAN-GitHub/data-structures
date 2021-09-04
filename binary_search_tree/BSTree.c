@@ -4,6 +4,7 @@
 
 #include "BSTree.h"
 
+
 struct TreeNodeStruct {
     ElementType val;
     TreeNode left;
@@ -31,6 +32,7 @@ BSTree createBSTree() {
 }
 
 int bstIsEmpty(BSTree bst) {
+    assert(bst);
     return bst->size == 0;
 }
 
@@ -46,6 +48,31 @@ TreeNode insertNode(TreeNode root, ElementType val) {
 
 void bstAdd(BSTree bst, ElementType val) {
     bst->root = insertNode(bst->root, val);
+    bst->size++;
+}
+
+ElementType findMinNode(TreeNode root) {
+    if (root->left == NULL)
+        return root->val;
+    return findMinNode(root->left);
+}
+
+ElementType bstFindMin(BSTree bst) {
+    if (!bstIsEmpty(bst))
+        return findMinNode(bst->root);
+    return 0;
+}
+
+ElementType findMaxNode(TreeNode root) {
+    if (root->right == NULL)
+        return root->val;
+    return findMaxNode(root->right);
+}
+
+ElementType bstFindMax(BSTree bst) {
+    if (!bstIsEmpty(bst))
+        return findMaxNode(bst->root);
+    return 0;
 }
 
 void printPreTree(TreeNode root) {

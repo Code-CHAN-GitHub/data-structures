@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 typedef int ElementType;
 
@@ -30,6 +31,16 @@ int bstIsEmpty(BSTree bst);
  * 向树中添加元素
  */
 void bstAdd(BSTree bst, ElementType val);
+
+/*
+ * 查找树中最小的元素
+ */
+ElementType bstFindMin(BSTree bst);
+
+/*
+ * 查找树中最大的元素
+ */
+ElementType bstFindMax(BSTree bst);
 
 /*
  * 打印树
