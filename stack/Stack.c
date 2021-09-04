@@ -4,30 +4,26 @@
 
 #include "Stack.h"
 
-Stack createStack() {
+Stack *createStack() {
     return createVector();
 }
 
-void stackPush(Stack stk, ElementType val) {
-    vectorAdd(stk, val);
+void stackPush(Stack *stk, void *item) {
+    vectorAdd(stk, item);
 }
 
-ElementType stackPeek(Stack stk) {
+void *stackPeek(Stack *stk) {
     return vectorGet(stk, stackSize(stk) - 1);
 }
 
-ElementType stackPop(Stack stk) {
+void *stackPop(Stack *stk) {
     return vectorRemove(stk, stackSize(stk) - 1);
 }
 
-int stackSize(Stack stk) {
+int stackSize(Stack *stk) {
     return vectorSize(stk);
 }
 
-int stackIsEmpty(Stack stk) {
+int stackIsEmpty(Stack *stk) {
     return stackSize(stk) == 0;
-}
-
-void printStack(Stack stk) {
-    printVector(stk);
 }
