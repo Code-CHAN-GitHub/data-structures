@@ -43,6 +43,11 @@ ElementType bstFindMin(BSTree bst);
 ElementType bstFindMax(BSTree bst);
 
 /*
+ * 删除树中元素
+ */
+void bstRemove(BSTree bst, ElementType val);
+
+/*
  * 打印树
  */
 void printTree(BSTree bst);

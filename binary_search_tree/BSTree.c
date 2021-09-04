@@ -75,6 +75,31 @@ ElementType bstFindMax(BSTree bst) {
     return 0;
 }
 
+TreeNode removeNode(TreeNode root, ElementType val) {
+    if (root == NULL)
+        return root;
+    else if (val < root->val)
+        root->left = removeNode(root->left, val);
+    else if (val > root->val)
+        root->right = removeNode(root->right, val);
+    else if (root->left && root->right) {
+        root->val = findMinNode(root->right);
+        root->right = removeNode(root->right, root->val);
+    } else {
+        TreeNode tmp = root;
+        if (root->left == NULL)
+            root = root->right;
+        else
+            root = root->left;
+        free(tmp);
+    }
+    return root;
+}
+
+void bstRemove(BSTree bst, ElementType val) {
+    removeNode(bst->root, val);
+}
+
 void printPreTree(TreeNode root) {
     if (root == NULL)
         return;
