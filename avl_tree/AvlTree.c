@@ -16,3 +16,15 @@ struct AvlTreeStruct {
     AvlTreeNode root;
 };
 
+AvlTree createAvlTree() {
+    AvlTree avlTree = (AvlTree) malloc(sizeof(struct AvlTreeStruct));
+    avlTree->size = 0;
+    avlTree->root = NULL;
+    return avlTree;
+}
+
+int avlIsEmpty(AvlTree avl) {
+    assert(avl);
+    return avl->size == 0;
+}
+
