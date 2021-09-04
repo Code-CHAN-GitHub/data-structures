@@ -4,7 +4,6 @@
 
 #include "BSTree.h"
 
-
 struct TreeNodeStruct {
     ElementType val;
     TreeNode left;
