@@ -99,75 +99,36 @@ void insertionSort(void **base, size_t nitems, int (*compar)(void *, void *)){
     }
 }
 
-/*
- * 获取希尔排序过程中用到的 Hibbard 增量序列
- */
-int* getHibbardStepArr(int n, int *arrSize) {
-    int i = 1;
+Vector *getHibbardStepVec(size_t nitems) {
+    Vector *vec = createVector();
+    size_t i = 1;
     while (1) {
-        int t = (1 << i) - 1;
-        if (t >= n)
+        size_t *x = malloc(sizeof(size_t));
+        *x = (1 << i) - 1;
+        if (*x >= nitems)
             break;
-        (*arrSize)++;
+        vectorAdd(vec, x);
         i++;
     }
-    int *res = (int *) malloc(sizeof(int) * (*arrSize));
-    i = 1;
-    while (1) {
-        int t = (1 << i) - 1;
-        if (t >= n)
-            break;
-        res[i - 1] = t;
-        i++;
-    }
-    return res;
+    return vec;
 }
 
-void shellSort(ElementType *arr, int left, int right) {
-    if (left >= right)
-        return;
-
-    int len = right - left + 1;
-    int arrSize = 0;
-    int *stepArr = getHibbardStepArr(len, &arrSize);
-    for (int k = arrSize - 1; k >= 0; k--) {
-        int increment = stepArr[k];
-        for (int i = increment; i <= right; i += increment) {
-            int j, tmp = arr[i];
-            for (j = i; j >= increment + left && arr[j - increment] > tmp; j -= increment)
-                arr[j] = arr[j - increment];
-            arr[j] = tmp;
+void shellSort(void **base, size_t nitems, int (*compare)(void *, void *)) {
+    Vector *stepVec = getHibbardStepVec(nitems);
+    for (size_t k = vectorSize(stepVec) - 1; ; k--) {
+        size_t increment = *(size_t *) vectorGet(stepVec, k);
+        for (size_t i = increment; i <= nitems - 1; i += increment) {
+            size_t j;
+            void *tmp = base[i];
+            for (j = i; j >= increment && compare(base[j - increment], tmp) > 0; j -= increment)
+                base[j] = base[j - increment];
+            base[j] = tmp;
         }
+        if (k == 0)
+            break;
     }
-    free(stepArr);
+    free(stepVec);
 }
-
-/**
- * 堆排序下浮操作
- */
-//void shiftDown(ElementType *arr, int i, int n) {
-//    int tmp = arr[i], child;
-//    for (; i * 2 + 1 < n; i = child) {
-//        child = i * 2 + 1;
-//        if (child < n - 1 && arr[child + 1] > arr[child])
-//            child++;
-//        if (tmp < arr[child])
-//            arr[i] = arr[child];
-//        else
-//            break;
-//    }
-//    arr[i] = tmp;
-//}
-//
-//void heapSort(ElementType *arr, int n) {
-//    int i;
-//    for (i = n / 2; i >= 0; i--) /* build heap */
-//        shiftDown(arr, i, n);
-//    for (i = n - 1; i > 0; i--) {
-////        swap(&arr[0], &arr[i]); /* poll max to last */
-//        shiftDown(arr, 0, i);
-//    }
-//}
 
 void shiftDown(void **arr, size_t i, size_t n, int (*compare)(void *, void *)) {
     void *tmp = arr[i];

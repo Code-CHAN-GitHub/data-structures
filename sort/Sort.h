@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include "../util/Arrays.h"
+#include "../vector/Vector.h"
 #include "../lang/Integer.h"
 
 typedef int ElementType;
@@ -31,7 +32,8 @@ void insertionSort(void **base, size_t nitems, int (*compar)(void *, void *));
 /**
  * 希尔排序
  */
-void shellSort(ElementType *arr, int left, int right);
+//void shellSort(ElementType *arr, int left, int right);
+void shellSort(void **base, size_t nitems, int (*compare)(void *, void *));
 
 /*
  * 堆排序
