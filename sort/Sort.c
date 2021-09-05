@@ -97,14 +97,27 @@ void mergeSort(ElementType *arr, int left, int right) {
     free(tmpArr);
 }
 
-void insertionSort(ElementType *arr, int left, int right) {
-    if (left >= right)
-        return;
-    for (int i = left + 1; i <= right; i++) {
-        int j, tmp = arr[i];
-        for (j = i; j > left && arr[j - 1] > tmp; j--)
-            arr[j] = arr[j - 1];
-        arr[j] = tmp;
+//void insertionSort(ElementType *arr, int left, int right) {
+//    if (left >= right)
+//        return;
+//    for (int i = left + 1; i <= right; i++) {
+//        int j, tmp = arr[i];
+//        for (j = i; j > left && arr[j - 1] > tmp; j--)
+//            arr[j] = arr[j - 1];
+//        arr[j] = tmp;
+//    }
+//}
+
+void insertionSort(void **base, size_t nitems, int (*compar)(void *, void *)){
+    for (size_t i = 1; i < nitems; i++) {
+        size_t j;
+        void *tmp = base[i];
+        for (j = i; j > 0; j--) {
+            if (compar(base[j - 1], tmp) <= 0)
+                break;
+            base[j] = base[j - 1];
+        }
+        base[j] = tmp;
     }
 }
 

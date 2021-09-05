@@ -23,7 +23,8 @@ void mergeSort(ElementType *arr, int left, int right);
 /**
  * 插入排序
  */
-void insertionSort(ElementType *arr, int left, int right);
+//void insertionSort(ElementType *arr, int left, int right);
+void insertionSort(void **base, size_t nitems, int (*compar)(void *, void *));
 
 /**
  * 希尔排序
