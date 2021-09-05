@@ -14,7 +14,7 @@ typedef int ElementType;
 /**
  * 快速排序
  */
-void quickSort(ElementType *arr, int left, int right);
+void quickSort(void **base, size_t nitems, int (*compar)(void *, void *));
 
 /**
  * 归并排序

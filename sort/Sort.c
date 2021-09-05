@@ -4,98 +4,55 @@
 
 #include "Sort.h"
 
-void swap(int *a, int *b) {
-    int t = *a;
-    *a = *b;
-    *b = t;
+void swap(void **arr, size_t i, size_t j) {
+    void *tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
 }
 
-/**
- * 快速排序中，三数中值分割
- * @param arr
- * @param left
- * @param right
- * @return pivot - 中枢值
- */
-int media3(int *arr, int left, int right) {
-    int mid = left + ((right - left) >> 1);
+void *media3(void **arr, size_t left, size_t right, int (*compare)(void *, void *)) {
+    size_t mid = left + ((right - left) >> 1);
 
-    if (arr[left] > arr[mid])
-        swap(&arr[left], &arr[mid]);
-    if (arr[left] > arr[right])
-        swap(&arr[left], &arr[right]);
-    if (arr[mid] > arr[right])
-        swap(&arr[mid], &arr[right]);
+    if (compare(arr[left], arr[mid]) > 0)
+        swap(arr, left, mid);
+    if (compare(arr[left], arr[right]) > 0)
+        swap(arr, left, right);
+    if (compare(arr[mid], arr[right]) > 0)
+        swap(arr, mid, right);
 
     /* arr[left] <= arr[mid] <= arr[right] */
-    swap(&arr[mid], &arr[right - 1]);
+    swap(arr, mid, right - 1);
     return arr[right - 1]; /* return pivot */
 }
 
-#define CUTOFF (15) /* 插入排序截止范围 */
+#define CUTOFF (8) /* 插入排序截止范围 */
 
-void quickSort(ElementType *arr, int left, int right) {
-    /*
-     * 如果长度小于 CUTOFF 则使用插入排序
-     */
+void quickSortHelper(void **arr, size_t left, size_t right, int (*compare)(void *, void *)) {
+    /* 如果长度小于 CUTOFF 则使用插入排序 */
     if (left + CUTOFF > right) {
-        insertionSort(arr, left, right);
+        insertionSort(arr + left, right - left + 1, compare);
         return;
     }
 
-    int pivot = media3(arr, left, right);
-    int i = left, j = right - 1;
+    void *pivot = media3(arr, left, right, compare);
+    size_t i = left, j = right - 1;
     while (1) {
-        while (arr[++i] < pivot) {};
-        while (arr[--j] > pivot) {};
+        while (compare(arr[++i], pivot) < 0) {};
+        while (compare(arr[--j], pivot) > 0) {};
         if (i >= j)
             break;
-        swap(&arr[i], &arr[j]);
+        swap(arr, i, j);
     }
     /* restore pivot */
-    swap(&arr[i], &arr[right - 1]);
+    swap(arr, i, right - 1);
 
-    quickSort(arr, left, i - 1);
-    quickSort(arr, i + 1, right);
+    quickSortHelper(arr, left, i - 1, compare);
+    quickSortHelper(arr, i + 1, right, compare);
 }
 
-/**
- * 归并排序的实现
- * @param arr
- * @param tmpArr
- * @param left
- * @param right
- */
-//void mergeSortHelper(ElementType *arr, ElementType *tmpArr, int left, int right) {
-//    if (left >= right)
-//        return;
-//
-//    /* divide */
-//    int mid = left + ((right - left) >> 1);
-//    mergeSortHelper(arr, tmpArr, left, mid);
-//    mergeSortHelper(arr, tmpArr, mid + 1, right);
-//
-//    /* merge */
-//    int i = left, j = mid + 1, k = 0;
-//    while (i <= mid && j <= right)
-//        if (arr[i] < arr[j])
-//            tmpArr[k++] = arr[i++];
-//        else
-//            tmpArr[k++] = arr[j++];
-//    while (i <= mid)
-//        tmpArr[k++] = arr[i++];
-//    while (j <= right)
-//        tmpArr[k++] = arr[j++];
-//
-//    arrayCopy(tmpArr, 0, arr, left, right - left + 1);
-//}
-
-//void mergeSort(ElementType *arr, int left, int right) {
-//    int len = right - left + 1;
-//    int *tmpArr = (int *) malloc(sizeof(int ) * len);
-//    mergeSortHelper(arr, tmpArr, left, right);
-//    free(tmpArr);
-//}
+void quickSort(void **base, size_t nitems, int (*compar)(void *, void *)) {
+    quickSortHelper(base, 0, nitems - 1, compar);
+}
 
 void mergeSortHelper(void **arr, void **tmpArr, size_t left, size_t right, int(*compar)(void *, void *)) {
     if (left >= right)
@@ -207,7 +164,7 @@ void heapSort(ElementType *arr, int n) {
     for (i = n / 2; i >= 0; i--) /* build heap */
         shiftDown(arr, i, n);
     for (i = n - 1; i > 0; i--) {
-        swap(&arr[0], &arr[i]); /* poll max to last */
+//        swap(&arr[0], &arr[i]); /* poll max to last */
         shiftDown(arr, 0, i);
     }
 }
