@@ -36,5 +36,6 @@ void shellSort(ElementType *arr, int left, int right);
 /*
  * 堆排序
  */
-void heapSort(ElementType *arr, int n);
+//void heapSort(ElementType *arr, int n);
+void heapSort(void **base, size_t nitems, int (*compare)(void *, void *));
 #endif //DATA_STRUCTURES_SORT_H

@@ -145,26 +145,55 @@ void shellSort(ElementType *arr, int left, int right) {
 /**
  * 堆排序下浮操作
  */
-void shiftDown(ElementType *arr, int i, int n) {
-    int tmp = arr[i], child;
+//void shiftDown(ElementType *arr, int i, int n) {
+//    int tmp = arr[i], child;
+//    for (; i * 2 + 1 < n; i = child) {
+//        child = i * 2 + 1;
+//        if (child < n - 1 && arr[child + 1] > arr[child])
+//            child++;
+//        if (tmp < arr[child])
+//            arr[i] = arr[child];
+//        else
+//            break;
+//    }
+//    arr[i] = tmp;
+//}
+//
+//void heapSort(ElementType *arr, int n) {
+//    int i;
+//    for (i = n / 2; i >= 0; i--) /* build heap */
+//        shiftDown(arr, i, n);
+//    for (i = n - 1; i > 0; i--) {
+////        swap(&arr[0], &arr[i]); /* poll max to last */
+//        shiftDown(arr, 0, i);
+//    }
+//}
+
+void shiftDown(void **arr, size_t i, size_t n, int (*compare)(void *, void *)) {
+    void *tmp = arr[i];
+    size_t child;
     for (; i * 2 + 1 < n; i = child) {
         child = i * 2 + 1;
-        if (child < n - 1 && arr[child + 1] > arr[child])
+        if (child < n - 1 && compare(arr[child + 1], arr[child]) > 0)
             child++;
-        if (tmp < arr[child])
-            arr[i] = arr[child];
-        else
+        if (compare(tmp, arr[child]) >= 0)
             break;
+        arr[i] = arr[child];
     }
     arr[i] = tmp;
 }
 
-void heapSort(ElementType *arr, int n) {
-    int i;
-    for (i = n / 2; i >= 0; i--) /* build heap */
-        shiftDown(arr, i, n);
-    for (i = n - 1; i > 0; i--) {
-//        swap(&arr[0], &arr[i]); /* poll max to last */
-        shiftDown(arr, 0, i);
+void heapSort(void **base, size_t nitems, int (*compare)(void *, void *)) {
+    size_t i;
+    for (i = nitems / 2; ; i--) { /* build heap */
+        shiftDown(base, i, nitems, compare);
+        /* 注意 size_t 类型无符号 */
+        if (i == 0)
+            break;
+    }
+    for (i = nitems - 1; i > 0; i--) {
+        /* 将堆顶元素移到尾部 */
+        swap(base, 0, i);
+        shiftDown(base, 0, i, compare);
     }
 }
