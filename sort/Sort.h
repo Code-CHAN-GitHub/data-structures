@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include "../util/Arrays.h"
+#include "../lang/Integer.h"
 
 typedef int ElementType;
 
@@ -18,7 +19,8 @@ void quickSort(ElementType *arr, int left, int right);
 /**
  * 归并排序
  */
-void mergeSort(ElementType *arr, int left, int right);
+//void mergeSort(ElementType *arr, int left, int right);
+void mergeSort(void **base, size_t nitems, int(*compar)(void *, void *));
 
 /**
  * 插入排序

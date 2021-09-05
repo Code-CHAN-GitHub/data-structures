@@ -66,19 +66,50 @@ void quickSort(ElementType *arr, int left, int right) {
  * @param left
  * @param right
  */
-void mergeSortHelper(ElementType *arr, ElementType *tmpArr, int left, int right) {
+//void mergeSortHelper(ElementType *arr, ElementType *tmpArr, int left, int right) {
+//    if (left >= right)
+//        return;
+//
+//    /* divide */
+//    int mid = left + ((right - left) >> 1);
+//    mergeSortHelper(arr, tmpArr, left, mid);
+//    mergeSortHelper(arr, tmpArr, mid + 1, right);
+//
+//    /* merge */
+//    int i = left, j = mid + 1, k = 0;
+//    while (i <= mid && j <= right)
+//        if (arr[i] < arr[j])
+//            tmpArr[k++] = arr[i++];
+//        else
+//            tmpArr[k++] = arr[j++];
+//    while (i <= mid)
+//        tmpArr[k++] = arr[i++];
+//    while (j <= right)
+//        tmpArr[k++] = arr[j++];
+//
+//    arrayCopy(tmpArr, 0, arr, left, right - left + 1);
+//}
+
+//void mergeSort(ElementType *arr, int left, int right) {
+//    int len = right - left + 1;
+//    int *tmpArr = (int *) malloc(sizeof(int ) * len);
+//    mergeSortHelper(arr, tmpArr, left, right);
+//    free(tmpArr);
+//}
+
+void mergeSortHelper(void **arr, void **tmpArr, size_t left, size_t right, int(*compar)(void *, void *)) {
     if (left >= right)
         return;
 
     /* divide */
-    int mid = left + ((right - left) >> 1);
-    mergeSortHelper(arr, tmpArr, left, mid);
-    mergeSortHelper(arr, tmpArr, mid + 1, right);
+    size_t mid = left + ((right - left) >> 1);
+    mergeSortHelper(arr, tmpArr, left, mid, compar);
+    mergeSortHelper(arr, tmpArr, mid + 1, right, compar);
 
     /* merge */
-    int i = left, j = mid + 1, k = 0;
+    size_t i = left, j = mid + 1, k = 0;
     while (i <= mid && j <= right)
-        if (arr[i] < arr[j])
+        if (compar(arr[i], arr[j]) < 0)
             tmpArr[k++] = arr[i++];
         else
             tmpArr[k++] = arr[j++];
@@ -87,26 +118,16 @@ void mergeSortHelper(ElementType *arr, ElementType *tmpArr, int left, int right)
     while (j <= right)
         tmpArr[k++] = arr[j++];
 
-    arrayCopy(tmpArr, 0, arr, left, right - left + 1);
+    for (size_t ii = 0; ii < right - left + 1; ii++)
+        arr[ii + left] = tmpArr[ii];
 }
 
-void mergeSort(ElementType *arr, int left, int right) {
-    int len = right - left + 1;
-    int *tmpArr = (int *) malloc(sizeof(int ) * len);
-    mergeSortHelper(arr, tmpArr, left, right);
-    free(tmpArr);
+void mergeSort(void **base, size_t nitems, int(*compar)(void *, void *)) {
+    void **tmp = (void **) malloc(sizeof(void *) * nitems);
+    mergeSortHelper(base, tmp, 0, nitems - 1, compar);
+    free(tmp);
 }
 
-//void insertionSort(ElementType *arr, int left, int right) {
-//    if (left >= right)
-//        return;
-//    for (int i = left + 1; i <= right; i++) {
-//        int j, tmp = arr[i];
-//        for (j = i; j > left && arr[j - 1] > tmp; j--)
-//            arr[j] = arr[j - 1];
-//        arr[j] = tmp;
-//    }
-//}
 
 void insertionSort(void **base, size_t nitems, int (*compar)(void *, void *)){
     for (size_t i = 1; i < nitems; i++) {
