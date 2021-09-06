@@ -10,28 +10,36 @@
 #include <assert.h>
 #include "../util/Math.h"
 
-typedef int ElementType;
+typedef struct AvlTreeNode AvlTreeNode;
+struct AvlTreeNode {
+    void *val;
+    AvlTreeNode *left;
+    AvlTreeNode *right;
+    int height;
+};
 
-struct AvlTreeNodeStruct;
-typedef struct AvlTreeNodeStruct *AvlTreeNode;
+struct AvlTree {
+    int size;
+    AvlTreeNode* root;
+    int (*compare)(void *, void *);
+};
 
-struct AvlTreeStruct;
-typedef struct AvlTreeStruct *AvlTree;
+typedef struct AvlTree AvlTree;
 
 /*
  * 创建一个空树
  */
-AvlTree createAvlTree();
+AvlTree *createAvlTree(int (*compare)(void *, void *));
 
 /*
  * 判断树是否为空
  */
-int avlIsEmpty(AvlTree avl);
+int avlIsEmpty(AvlTree *avl);
 
 /*
  * 向树中添加元素
  */
-void avlAdd(AvlTree avl, ElementType val);
+void avlAdd(AvlTree *avl, void *val);
 
 /*
  * 打印树
