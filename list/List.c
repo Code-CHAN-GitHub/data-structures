@@ -1,129 +1,120 @@
 #include "List.h"
 
-typedef struct ListNode ListNode;
-struct ListNode {
+typedef struct __list_node __list_node;
+struct __list_node {
     void *item;
-    ListNode *prev;
-    ListNode *next;
+    __list_node *prev;
+    __list_node *next;
 };
 
-struct List {
+struct list {
     int size;
-    ListNode *first;
-    ListNode *last;
+    __list_node *first;
+    __list_node *last;
 };
 
 /*
- * 创建 ListNode
+ * 创建 __list_node
  */
-ListNode *createListNode(void *item, ListNode *prev, ListNode *next);
+__list_node *__new_list_node(void *item, __list_node *prev, __list_node *next);
 
 /*
- * 根据索引查找 ListNode
+ * 根据索引查找 __list_node
  */
-ListNode *findListNode(List *l, int index);
+__list_node *__find_list_node(list *l, size_t index);
 
 /*
- * 判断是否为 list 的索引
+ * 判断是否为 list 的合法索引
  */
-int isListIndex(List *l, int index);
+int __is_list_index(list *l, size_t index);
 
 
-List *createList() {
-    List *l = (List*) malloc(sizeof(List));
+list *new_list() {
+    list *l = (list*) malloc(sizeof(list));
     l->size = 0;
     l->first = l->last = NULL;
     return l;
 }
 
-int listIsEmpty(List *l) {
+int list_empty(list *l) {
     assert(l);
     return l->size == 0;
 }
 
-int listSize(List *l) {
-    if (!listIsEmpty(l))
+int list_size(list *l) {
+    if (!list_empty(l))
         return l->size;
     return 0;
 }
 
-void listAddLast(List *l, void *item) {
-    ListNode *last = l->last;
-    ListNode *newNode = createListNode(item, last, NULL);
-    l->last = newNode;
+void list_push_back(list *l, void *item) {
+    __list_node *last = l->last;
+    __list_node *new_node = __new_list_node(item, last, NULL);
+    l->last = new_node;
     if (last == NULL)
-        l->first = newNode;
+        l->first = new_node;
     else
-        last->next = newNode;
+        last->next = new_node;
     l->size++;
 }
 
-void listAdd(List *l, void *item) {
-    listAddLast(l, item);
-}
-
-void listAddFirst(List *l, void *item) {
-    ListNode *first = l->first;
-    ListNode *newNode = createListNode(item, NULL, first);
-    l->first = newNode;
+void list_push_front(list *l, void *item) {
+    __list_node *first = l->first;
+    __list_node *new_node = __new_list_node(item, NULL, first);
+    l->first = new_node;
     if (first == NULL)
-        l->last = newNode;
+        l->last = new_node;
     else
-        first->prev = newNode;
+        first->prev = new_node;
     l->size++;
 }
 
-void listAddOnIndex(List *l, int index, void *item) {
-    // 此处不用 isListIndex 判断，因为可以向 index == listSize (即尾部) 添加元素
-    assert(l != NULL && index >= 0 && index <= listSize(l));
+void list_insert(list *l, size_t index, void *item) {
+    /* 此处不使用 __is_list_index 判断，是因为允许向 index 等于 list_size 处(即尾部) 添加元素 */
+    assert(l != NULL && index >= 0 && index <= list_size(l));
 
-    if (index == listSize(l)) {
-        listAddLast(l, item);
+    if (index == list_size(l)) {
+        list_push_back(l, item);
     } else if (index == 0) {
-        listAddFirst(l, item);
+        list_push_front(l, item);
     } else {
-        ListNode *p = findListNode(l, index);
-        ListNode *newNode = createListNode(item, p, p->next);
-        p->prev->next = newNode;
-        p->prev = newNode;
+        __list_node *p = __find_list_node(l, index);
+        __list_node *new_node = __new_list_node(item, p->prev, p);
+        p->prev->next = new_node;
+        p->prev = new_node;
         l->size++;
     }
 }
 
-void *listGetFirst(List *l) {
-    if (!listIsEmpty(l))
+void *list_front(list *l) {
+    if (!list_empty(l))
         return l->first->item;
     return NULL;
 }
 
-void *listGetLast(List *l) {
-    if (!listIsEmpty(l))
+void *list_back(list *l) {
+    if (!list_empty(l))
         return l->last->item;
     return NULL;
 }
 
-void *listGet(List *l, int index) {
-    assert(l != NULL && isListIndex(l, index));
+void *list_get(list *l, size_t index) {
+    assert(l != NULL && __is_list_index(l, index));
 
-    ListNode *first = l->first;
-    ListNode *p = first;
-    while (index-- > 0) {
-        p = p->next;
-    }
-    return p->item;
+    return __find_list_node(l, index)->item;
 }
 
-void listSet(List *l, int index, void *item) {
-    assert(l != NULL && isListIndex(l, index));
+void list_set(list *l, size_t index, void *item) {
+    assert(l != NULL && __is_list_index(l, index));
 
-    ListNode *node = findListNode(l, index);
+    __list_node *node = __find_list_node(l, index);
     node->item = item;
 }
 
-void *listRemoveLast(List *l) {
-    assert(l != NULL && !listIsEmpty(l));
+void *list_pop_back(list *l) {
+    assert(l != NULL && !list_empty(l));
 
-    ListNode *last = l->last;
+    __list_node *last = l->last;
     void *item = last->item;
     l->last = last->prev;
     if (l->last == NULL)
@@ -131,16 +122,16 @@ void *listRemoveLast(List *l) {
     else
         l->last->next = NULL;
     l->size--;
-    ListNode *tmp = last;
+    __list_node *tmp = last;
     free(last);
     return item;
 }
 
-void *listRemoveFirst(List *l) {
-    assert(l != NULL && !listIsEmpty(l));
+void *list_pop_front(list *l) {
+    assert(l != NULL && !list_empty(l));
 
-    ListNode *first = l->first;
-    ListNode *item = first->item;
+    __list_node *first = l->first;
+    __list_node *item = first->item;
     l->first = first->next;
     if (l->first == NULL)
         l->last = NULL;
@@ -150,15 +141,15 @@ void *listRemoveFirst(List *l) {
     return item;
 }
 
-void *listRemove(List *l, int index) {
-    assert(l != NULL && isListIndex(l, index));
+void *list_remove(list *l, size_t index) {
+    assert(l != NULL && __is_list_index(l, index));
 
     if (index == 0) {
-        return listRemoveFirst(l);
+        return list_pop_front(l);
     } else if (index == l->size - 1) {
-        return listRemoveLast(l);
+        return list_pop_back(l);
     }
-    ListNode *node = findListNode(l, index);
+    __list_node *node = __find_list_node(l, index);
     void *item = node->item;
     node->prev->next = node->next;
     node->next->prev = node->prev;
@@ -167,30 +158,30 @@ void *listRemove(List *l, int index) {
     return item;
 }
 
-ListNode *createListNode(void *item, ListNode *prev, ListNode *next) {
-    ListNode *newNode = (ListNode *) malloc(sizeof(ListNode));
-    newNode->item = item;
-    newNode->prev = prev;
-    newNode->next = next;
-    return newNode;
+__list_node *__new_list_node(void *item, __list_node *prev, __list_node *next) {
+    __list_node *new_node = (__list_node *) malloc(sizeof(__list_node));
+    new_node->item = item;
+    new_node->prev = prev;
+    new_node->next = next;
+    return new_node;
 }
 
-ListNode *findListNode(List *l, int index) {
+__list_node *__find_list_node(list *l, size_t index) {
     // 双向链表查找最坏情况时间复杂度为 O(N/2)
     if (index < (l->size >> 1)) {
-        ListNode *p = l->first;
-        for (int i = 0; i < index; i++)
+        __list_node *p = l->first;
+        for (size_t i = 0; i < index; i++)
             p = p->next;
         return p;
     } else {
-        ListNode *p = l->last;
-        for (int i = l->size - 1; i > index; i--)
+        __list_node *p = l->last;
+        for (size_t i = l->size - 1; i > index; i--)
             p = p->prev;
         return p;
     }
 }
 
-int isListIndex(List *l, int index) {
+int __is_list_index(list *l, size_t index) {
     return index >= 0 && index < l->size;
 }
 

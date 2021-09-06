@@ -1,115 +1,85 @@
 /**
- * List 使用双向链表实现
+ * list 使用双向链表实现
  */
 
-#ifndef TMP_LIST_H
-#define TMP_LIST_H
+#ifndef TMP_list_H
+#define TMP_list_H
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
-typedef struct List List;
+typedef struct list list;
 
 /**
  * 创建一个空链表
- * @return - 空链表
  */
-List *createList();
+list *new_list();
 
 /**
  * 判断链表是否为空
- * @param l - 链表
- * @return 1 为空，0 为非空
  */
-int listIsEmpty(List *l);
+int list_empty(list *l);
 
 /**
  * 返回链表大小
- * @param l - 链表
- * @return size - 大小
  */
-int listSize(List *l);
+int list_size(list *l);
 
 /**
  * 从链表尾部插入元素
- * @param l - 链表
- * @param val - 元素
  */
-void listAdd(List *l, void *item);
-
-/**
- * 从链表尾部插入元素
- * @param l - 链表
- * @param val - 元素
- */
-void listAddLast(List *l, void *item);
+void list_push_back(list *l, void *item);
 
 /**
  * 从链表头部插入元素
- * @param l - 链表
- * @param val - 元素
  */
-void listAddFirst(List *l, void *item);
+void list_push_front(list *l, void *item);
 
 /**
  * 在此链表指定位置插入元素，将当前位置的节点（如果有）和任何后续节点向后移动，索引位置加 1
- * @param l - 链表
- * @param index - 索引
- * @param val 元素
+ * 索引从 0 开始，到 list_size(l) - 1，若索引不在合法范围，则会产生异常
  */
-void listAddOnIndex(List *l, int index, void *item);
+void list_insert(list *l, size_t index, void *item);
 
 /**
  * 获取链表的头节点的值
- * @param l - 链表
- * @return val - 元素
+ * 若链表为空则返回 NULL
  */
-void *listGetFirst(List *l);
+void *list_front(list *l);
 
 /**
  * 获取链表尾部节点的值
- * @param l - 链表
- * @return val - 元素
+ * 若链表为空则返回 NULL
  */
-void *listGetLast(List *l) ;
+void *list_back(list *l) ;
 
 /**
- * 根据索引获取元素
- * @param l - 链表
- * @param index - 索引
- * @return val - 元素
+ * 根据索引获取元素，索引从 0 开始，到 list_size(l) - 1
+ * 若索引不在合法范围，则会产生异常
  */
-void *listGet(List *l, int index);
+void *list_get(list *l, size_t index);
 
 /**
- * 根据索引修改对应节点的元素值
- * @param l - 链表
- * @param val - 值
- * @param index - 索引
+ * 根据索引修改对应节点的元素值，索引从 0 开始，到 list_size(l) - 1
+ * 若索引不在合法范围，则会产生异常
  */
-void listSet(List *l, int index, void *item);
+void list_set(list *l, size_t index, void *item);
 
 /**
- * 移除尾部节点
- * @param l - 链表
- * @return val - 移除前尾部元素
+ * 移除尾部节点，若链表为空，则会产生异常
  */
-void *listRemoveLast(List *l) ;
+void *list_pop_back(list *l) ;
 
 /**
- * 移除头部节点
- * @param l - 链表
- * @return val - 移除前头部元素
+ * 移除头部节点，若链表为空，则会产生异常
  */
-void *listRemoveFirst(List *l);
+void *list_pop_front(list *l);
 
 /**
  * 根据索引移除节点，将当前位置的下一节点（如果有）和任何后续节点向前移动，索引位置减 1
- * @param l
- * @param index
- * @return val - 元素
+ * 索引从 0 开始，到 list_size(l) - 1，若索引不在合法范围，则会产生异常
  */
-void *listRemove(List *l, int index);
+void *list_remove(list *l, size_t index);
 
-#endif //TMP_LIST_H
+#endif //TMP_list_H
