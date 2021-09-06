@@ -8,47 +8,51 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "../queue/Queue.h"
 
-typedef int ElementType;
 
-struct TreeNodeStruct;
-typedef struct TreeNodeStruct *TreeNode;
+typedef struct TreeNode TreeNode;
+struct TreeNode {
+    void *val;
+    TreeNode *left;
+    TreeNode *right;
+};
 
-struct BSTreeStruct;
-typedef struct BSTreeStruct *BSTree;
+typedef struct BSTree BSTree;
+struct BSTree {
+    int size;
+    TreeNode *root;
+    int (*compare)(void *, void *);
+};
 
 /*
  * 返回一个空的二叉查找树
  */
-BSTree createBSTree();
+BSTree *createBSTree(int (*compare)(void *, void *));
 
 /*
  * 判断树是否为空
  */
-int bstIsEmpty(BSTree bst);
+int bstIsEmpty(BSTree *bst);
 
 /*
  * 向树中添加元素
  */
-void bstAdd(BSTree bst, ElementType val);
+void bstAdd(BSTree *bst, void *val);
 
 /*
  * 查找树中最小的元素
  */
-ElementType bstFindMin(BSTree bst);
+void *bstFindMin(BSTree *bst);
 
 /*
  * 查找树中最大的元素
  */
-ElementType bstFindMax(BSTree bst);
+void *bstFindMax(BSTree *bst);
 
 /*
  * 删除树中元素
  */
-void bstRemove(BSTree bst, ElementType val);
+void bstRemove(BSTree *bst, void *val);
 
-/*
- * 打印树
- */
-void printTree(BSTree bst);
 #endif //DATA_STRUCTURES_BSTREE_H
