@@ -4,21 +4,22 @@
 
 #include "Queue.h"
 
-struct Queue {
-    int front;
-    int rear;
-    int size;
-    int capacity;
+struct queue {
+    size_t front;
+    size_t rear;
+    size_t size;
+    size_t capacity;
     void **arr;
 };
 
-/*
+/**
  * 队列扩容
+ * @param min_capacity - 最小扩容量，即扩容后容量至少为 min_capacity
  */
-void queueGrow(Queue *q, int minCapacity);
+void __queue_grow(queue *q, size_t min_capacity);
 
-Queue *createQueue() {
-    Queue *q = (Queue*) malloc(sizeof(Queue));
+queue *new_queue() {
+    queue *q = (queue*) malloc(sizeof(queue));
     q->size = q->capacity = 0;
     q->front = 0;
     q->rear = -1;
@@ -26,26 +27,26 @@ Queue *createQueue() {
     return q;
 }
 
-int queueSize(Queue *q) {
+size_t queue_size(queue *q) {
+    assert(q);
     return q->size;
 }
 
-int queueIsEmpty(Queue *q) {
+int queue_empty(queue *q) {
     assert(q);
-
     return q->size == 0;
 }
 
-void queueAdd(Queue *q, void *val) {
+void queue_push(queue *q, void *val) {
     if (q->size == q->capacity)
-        queueGrow(q, q->size + 2);
+        __queue_grow(q, q->size + 2);
     q->rear = (q->rear + 1) % q->capacity;
     q->arr[q->rear] = val;
     q->size++;
 }
 
-void *queuePoll(Queue *q) {
-    if (!queueIsEmpty(q)) {
+void *queue_pop(queue *q) {
+    if (!queue_empty(q)) {
         void *item = q->arr[q->front];
         q->front = (q->front + 1) % q->capacity;
         q->size--;
@@ -54,31 +55,32 @@ void *queuePoll(Queue *q) {
     return NULL;
 }
 
-void *queuePeek(Queue *q) {
-    if (!queueIsEmpty(q)) {
+void *queue_front(queue *q) {
+    if (!queue_empty(q))
         return q->arr[q->front];
-    }
     return NULL;
 }
 
-void queueGrow(Queue *q, int minCapacity) {
-    int oldCapacity = q->capacity;
-    int newCapacity = oldCapacity + (oldCapacity >> 1);
-    if (newCapacity < minCapacity)
-        newCapacity = minCapacity;
-    void **oldArr = q->arr;
-    void **newArr = (void *) malloc(sizeof(void *) * newCapacity);
-    q->arr = newArr;
-    q->capacity = newCapacity;
+void __queue_grow(queue *q, size_t min_capacity) {
+    size_t old_capacity = q->capacity;
+    size_t new_capacity = old_capacity + (old_capacity >> 1);
+    if (new_capacity < min_capacity)
+        new_capacity = min_capacity;
+
+    void **old_arr = q->arr;
+    void **new_arr = (void *) malloc(sizeof(void *) * new_capacity);
+    q->arr = new_arr;
+    q->capacity = new_capacity;
+
     if (q->size > 0) {
-        int i = q->front, t = 0;
+        size_t i = q->front, t = 0;
         while (i != q->rear) {
-            newArr[t++] = oldArr[i];
-            i = (i + 1) % oldCapacity;
+            new_arr[t++] = old_arr[i];
+            i = (i + 1) % old_capacity;
         }
-        newArr[t] = oldArr[i];
+        new_arr[t] = old_arr[i];
         q->front = 0;
         q->rear = q->size - 1;
-        free(oldArr);
+        free(old_arr);
     }
 }
