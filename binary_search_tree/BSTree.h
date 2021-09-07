@@ -10,49 +10,41 @@
 #include <assert.h>
 #include "../queue/Queue.h"
 
-
-typedef struct TreeNode TreeNode;
-struct TreeNode {
-    void *val;
-    TreeNode *left;
-    TreeNode *right;
-};
-
-typedef struct BSTree BSTree;
-struct BSTree {
-    int size;
-    TreeNode *root;
-    int (*compare)(void *, void *);
-};
+typedef struct binary_search_tree binary_search_tree;
 
 /*
  * 返回一个空的二叉查找树
  */
-BSTree *createBSTree(int (*compare)(void *, void *));
+binary_search_tree *new_bs_tree(int (*compare)(void *, void *));
 
 /*
  * 判断树是否为空
  */
-int bstIsEmpty(BSTree *bst);
+int bs_tree_empty(binary_search_tree *bs_tree);
 
 /*
  * 向树中添加元素
  */
-void bstAdd(BSTree *bst, void *val);
+void bs_tree_push(binary_search_tree *bs_tree, void *val);
 
 /*
  * 查找树中最小的元素
  */
-void *bstFindMin(BSTree *bst);
+void *bs_tree_min(binary_search_tree *bs_tree);
 
 /*
  * 查找树中最大的元素
  */
-void *bstFindMax(BSTree *bst);
+void *bs_tree_max(binary_search_tree *bs_tree);
 
 /*
  * 删除树中元素
  */
-void bstRemove(BSTree *bst, void *val);
+void bs_tree_remove(binary_search_tree *bs_tree, void *val);
+
+/**
+ * 打印树结构
+ */
+void bs_tree_print(binary_search_tree *bs_tree, char *(element_to_str)(char s[], const void*));
 
 #endif //DATA_STRUCTURES_BSTREE_H
