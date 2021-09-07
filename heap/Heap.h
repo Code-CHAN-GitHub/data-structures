@@ -2,41 +2,40 @@
  * 堆
  */
 
-#ifndef DATA_STRUCTURES_HEAP_H
-#define DATA_STRUCTURES_HEAP_H
+#ifndef DATA_STRUCTURES_heap_H
+#define DATA_STRUCTURES_heap_H
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../util/Arrays.h"
+#include <assert.h>
 
-struct HeapStruct;
-typedef struct HeapStruct *Heap;
+typedef struct heap heap;
 
 /**
  * 返回一个空的堆
  */
-Heap createHeap();
+heap *new_heap(int (*compare)(const void*, const void*));
 
 /**
  * 判断堆是否为空
  */
-int heapIsEmpty(Heap heap);
+int heap_empty(heap *heap);
+
+size_t heap_size(heap *heap);
 
 /**
  * 将元素压入堆中
  */
-void heapAdd(Heap heap, int val);
+void heap_push(heap *heap, void *val);
 
 /**
  * 获取堆顶的元素，并不删除
  */
-int heapPeek(Heap heap);
+void *heap_top(heap *heap);
 
 /**
  * 弹出堆顶元素
  */
-int heapPoll(Heap heap);
+void *heap_pop(heap *heap);
 
-void printHeap(Heap heap);
-
-#endif //DATA_STRUCTURES_HEAP_H
+#endif //DATA_STRUCTURES_heap_H
