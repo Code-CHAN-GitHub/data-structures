@@ -1,86 +1,94 @@
 /**
- * Vector 动态数组实现
+ * vector 动态数组实现
  */
 
-#ifndef DATA_STRUCTURES_VECTOR_H
-#define DATA_STRUCTURES_VECTOR_H
+#ifndef DATA_STRUCTURES_vector_H
+#define DATA_STRUCTURES_vector_H
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../util/Arrays.h"
+#include <assert.h>
 
-typedef struct Vector Vector;
+typedef struct vector vector;
 
 /**
  * 创建一个空的 vector
- * @return vector
  */
-Vector *createVector();
+vector *new_vector();
 
 /**
  * 指定初始化容量创建 vector
- * @param initialCapacity
- * @return vector
  */
-Vector *createVectorByInitCapacity(int initialCapacity);
+vector *new_vector_with_capacity(int initialCapacity);
 
 /**
- * 返回 vector 大小
- * @param vec - vector
- * @return size - 大小
+ * 返回 vector 内元素数量
  */
-int vectorSize(Vector *vec);
+size_t vector_size(vector *vec);
+
+/**
+ * 判断 vector 是否为空
+ */
+int vector_empty(vector *vec);
 
 /**
  * 向 vector 尾部插入元素
- * @param vec - vector
- * @param val - 元素
  */
-void vectorAdd(Vector *vec, void *item);
+void vector_push_back(vector *vec, void *item);
+
+/**
+ * 向 vector 头部插入元素，并将原容器内所有元素的索引位置加 1
+ */
+void vector_push_front(vector *vec, void *item);
 
 /**
  * 根据索引插入元素，并将当前位置的元素（如果有）和任何后续元素向后移动，索引位置加 1
- * @param vec - vector
- * @param val - 元素
- * @param index - 索引
+ * @param index - 范围为 [0, vector_size]
  */
-void vectorAddByIndex(Vector *vec, int index, void *item);
+void vector_insert(vector *vec, size_t index, void *item);
 
 /**
  * 根据索引获取元素
- * @param vec - vector
- * @param index - 索引
- * @return val - 元素
+ * @param index - 范围为 [0, vector_size - 1]
+ * @return 返回对应位置元素，若索引不在上述范围，则返回 NULL
  */
-void *vectorGet(Vector *vec, int index);
+void *vector_get(vector *vec, size_t index);
+
+/**
+ * 获取头部元素
+ * @return 返回元素，若容器为空，返回 NULL
+ */
+void *vector_front(vector *vec);
+
+/**
+ * 获取尾部元素
+ * @return 返回元素，若容器为空，返回 NULL
+ */
+void *vector_back(vector *vec);
 
 /**
  * 根据索引移除元素，将当前位置的下一元素（如果有）和任何后续元素向前移动，索引位置减 1
- * @param vec - vector
- * @param index - 索引
- * @return val - 移除前该位置的元素
+ * @param index - 范围为 [0, vector_size - 1]
+ * @return 返回对应位置元素，若索引不在上述范围，则返回 NULL
  */
-void *vectorRemove(Vector *vec, int index);
+void *vector_remove(vector *vec, size_t index);
+
+/**
+ * 弹出头部元素
+ * @return 容器不为空，返回元素。若为空，返回 NULL
+ */
+void *vector_pop_front(vector *vec);
+
+/**
+ * 弹出尾部元素
+ * @return 容器不为空，返回元素。若为空，返回 NULL
+ */
+void *vector_pop_back(vector *vec);
 
 /**
  * 根据索引修改对应元素的值
- * @param vec - vector
- * @param val - 元素
- * @param index - 索引
+ * @param index - 范围为 [0, vector_size - 1]
  */
-void vectorSet(Vector *vec, int index, void *item);
+void vector_set(vector *vec, size_t index, void *item);
 
-/**
- * 生成对应的数组
- * @param vec - vector
- * @return val[] - 元素数组
- */
-//void* vectorToArray(Vector vec);
-
-/**
- * 打印 vector
- * @param vec - vector
- */
-//void printVector(Vector vec);
-
-#endif //DATA_STRUCTURES_VECTOR_H
+#endif //DATA_STRUCTURES_vector_H
