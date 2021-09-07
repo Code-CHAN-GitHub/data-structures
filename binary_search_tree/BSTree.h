@@ -37,6 +37,11 @@ void *bs_tree_min(binary_search_tree *bs_tree);
  */
 void *bs_tree_max(binary_search_tree *bs_tree);
 
+/**
+ * 判断树中是否含有元素，利用 compare 函数比较，若两元素的 compare 返回值为 0，则判断是该元素
+ */
+int bs_tree_contain(binary_search_tree *bs_tree, void *val);
+
 /*
  * 删除树中元素
  */

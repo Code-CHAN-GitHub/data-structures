@@ -99,8 +99,26 @@ __bs_tree_node *__remove_bs_tree_node(__bs_tree_node *root, void *val, int (*com
     return root;
 }
 
-void bs_treeRemove(binary_search_tree *bs_tree, void *val) {
-    __remove_bs_tree_node(bs_tree->root, val, bs_tree->compare);
+__bs_tree_node *__find_bs_tree_node(__bs_tree_node *root, void *val, int (*compare)(const void *, const void *)) {
+    if (root == NULL)
+        return 0;
+    else if (compare(val, root->val) < 0)
+        return __find_bs_tree_node(root->left, val, compare);
+    else if (compare(val, root->val) > 0)
+        return __find_bs_tree_node(root->right, val, compare);
+    else
+        return root;
+}
+
+int bs_tree_contain(binary_search_tree *bs_tree, void *val) {
+    if (!bs_tree_empty(bs_tree))
+        return __find_bs_tree_node(bs_tree->root, val, bs_tree->compare) != NULL;
+    return 0;
+}
+
+void bs_tree_remove(binary_search_tree *bs_tree, void *val) {
+    if (!bs_tree_empty(bs_tree))
+        bs_tree->root = __remove_bs_tree_node(bs_tree->root, val, bs_tree->compare);
 }
 
 void bs_tree_print(binary_search_tree *bs_tree, char *(element_to_str)(char s[], const void*)) {
