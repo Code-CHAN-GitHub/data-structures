@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "../queue/Queue.h"
 
 typedef struct avl_tree avl_tree;
@@ -36,6 +37,12 @@ void avl_tree_push(avl_tree *avl, void *val);
  * 判断树中是否含有元素，利用 compare 函数比较，若两元素的 compare 返回值为 0，则判断是该元素
  */
 int avl_tree_contain(avl_tree *avl, void *val);
+
+
+/**
+ * 删除树中元素
+ */
+void avl_tree_reomve(avl_tree *avl, void *val);
 
 /**
  * 打印树的结构

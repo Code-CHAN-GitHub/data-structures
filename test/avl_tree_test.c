@@ -66,10 +66,10 @@ void __test_avl_bs_tree_height() {
         avl_tree_push(avl, x);
         bs_tree_push(bs_tree, x);
     }
-    printf("bs_tree ==> ");
-    bs_tree_print(bs_tree, __int_to_str1);
-    printf("avl_tree ==> ");
+    printf("avl_tree \n");
     avl_tree_print(avl, __int_to_str1);
+    printf("bs_tree \n");
+    bs_tree_print(bs_tree, __int_to_str1);
 }
 
 void __test_avl_tree_contain() {
@@ -93,9 +93,27 @@ void __test_avl_tree_contain() {
     }
 }
 
+void __test_avl_tree_remove() {
+    avl_tree *avl = new_bs_tree(__int_compare2);
+    int *a[10];
+    srand((unsigned ) time(NULL));
+
+    for (int i = 0; i < 10; i++) {
+        a[i] = malloc(sizeof(int));
+        *a[i] = rand() % 100;
+        avl_tree_push(avl, a[i]);
+    }
+    avl_tree_print(avl, __int_to_str1);
+
+    printf("remove %d \n", *a[3]);
+    avl_tree_reomve(avl, a[3]);
+    avl_tree_print(avl, __int_to_str1);
+}
+
 int main() {
 //    __test_new_avl_tree();
 //    __test_avl_operator();
 //    __test_avl_bs_tree_height();
-    __test_avl_tree_contain();
+//    __test_avl_tree_contain();
+    __test_avl_tree_remove();
 }

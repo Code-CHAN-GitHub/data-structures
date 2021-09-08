@@ -125,37 +125,69 @@ int avl_tree_contain(avl_tree *avl, void *val) {
     return 0;
 }
 
+__avl_tree_node *__avl_tree_min_node(__avl_tree_node *root) {
+    if (root == NULL || root->left == NULL)
+        return root;
+    return __avl_tree_min_node(root->left);
+}
 
-void avl_tree_print(avl_tree *avl, char *(element_to_str)(char s[], const void*)) {
-    printf("[");
-    if (!avl_tree_empty(avl)) {
-        queue *queue = new_queue();
-        __avl_tree_node *root = avl->root;
-        queue_push(queue, root);
-
-        size_t cnt_not_null = 1;
-        char *str = malloc(sizeof(char) * 100);
-        while (!queue_empty(queue) && cnt_not_null) {
-            size_t sz = queue_size(queue);
-            for (size_t i = 0; i < sz; i++) {
-                __avl_tree_node *node = queue_pop(queue);
-                if (!node) {
-                    printf("null, ");
-                } else {
-                    cnt_not_null--;
-
-                    printf("%s, ", element_to_str(str, node->val));
-                    queue_push(queue, node->left);
-                    queue_push(queue, node->right);
-                    cnt_not_null += node->left == NULL ? 0 : 1;
-                    cnt_not_null += node->right == NULL ? 0 : 1;
-                }
-                if (!cnt_not_null)
-                    break;
-            }
-        }
-        free(str);
-        printf("\b\b");
+__avl_tree_node *__avl_tree_remove_node(__avl_tree_node *root, void *val, int (*compare)(const void *, const void *)) {
+    if (root == NULL)
+        return root;
+    else if (compare(val, root->val) < 0)
+        root->left = __avl_tree_remove_node(root->left, val, compare);
+    else if (compare(val, root->val) > 0)
+        root->right = __avl_tree_remove_node(root->right, val, compare);
+    else if (root->left && root->right) {
+        root->val = __avl_tree_min_node(root->right)->val;
+        root->right = __avl_tree_remove_node(root->right, root->val, compare);
+    } else {
+        __avl_tree_node *tmp = root;
+        if (tmp->left == NULL)
+            root = root->right;
+        else
+            root = root->left;
+        free(tmp);
     }
-    printf("]\n");
+    if (root != NULL)
+        root->height = __max(__avl_tree_node_height(root->left), __avl_tree_node_height(root->right)) + 1;
+    return root;
+}
+
+void avl_tree_reomve(avl_tree *avl, void *val) {
+    if (!avl_tree_empty(avl))
+        avl->root = __avl_tree_remove_node(avl->root, val, avl->compare);
+}
+
+void __avl_tree_pretty_print_dfs(__avl_tree_node *node, char *prefix, int is_left, char *(to_string)(char s[], const void*)) {
+    if (node == NULL) {
+        printf("Empty tree\n");
+        return;
+    }
+
+    if (node->right != NULL) {
+        char tmp[1000];
+        strcpy(tmp, prefix);
+        __avl_tree_pretty_print_dfs(node->right, strcat(tmp, (is_left ? "│   " : "    ")), 0, to_string);
+    }
+
+    char tmp[1000];
+    strcpy(tmp, prefix);
+    char tmp2[100] = {'\0'};
+    printf("%s\n", strcat(strcat(tmp, (is_left ? "└── " : "┌── ")) , to_string(tmp2, node->val)));
+
+    if (node->left != NULL) {
+        char tmp2[1000];
+        strcpy(tmp2, prefix);
+        __avl_tree_pretty_print_dfs(node->left, strcat(tmp2, (is_left ? "    " : "│   ")), 1, to_string);
+    }
+}
+
+void __avl_tree_pretty_print(__avl_tree_node *node, char *(to_string)(char s[], const void*)) {
+    char prefix[1000] = {'\0'};
+    __avl_tree_pretty_print_dfs(node,  prefix, 1, to_string);
+}
+
+void avl_tree_print(avl_tree *avl, char *(to_string)(char s[], const void*)) {
+    __avl_tree_pretty_print(avl->root, to_string);
 }
