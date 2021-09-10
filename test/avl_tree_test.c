@@ -110,10 +110,10 @@ void __test_avl_tree_remove() {
     avl_tree_print(avl, __int_to_str1);
 }
 
-int main() {
-//    __test_new_avl_tree();
-//    __test_avl_operator();
-//    __test_avl_bs_tree_height();
-//    __test_avl_tree_contain();
-    __test_avl_tree_remove();
-}
+//int main() {
+////    __test_new_avl_tree();
+////    __test_avl_operator();
+////    __test_avl_bs_tree_height();
+////    __test_avl_tree_contain();
+//    __test_avl_tree_remove();
+//}
