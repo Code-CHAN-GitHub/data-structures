@@ -40,6 +40,8 @@ void map_put(map *map, void *key, void *value);
  */
 void *map_get(map *map, void *key);
 
+void map_remove(map *map, void *key);
+
 /**
  * 打印表结构
  * @param map

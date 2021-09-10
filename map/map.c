@@ -157,6 +157,30 @@ void *map_get(map *map, void *key) {
     return NULL;
 }
 
+void map_remove(map *map, void *key) {
+    if (!map_empty(map)) {
+        size_t i;
+        int hash = map->hash(key);
+        if (map->tab[i = (hash & (map->capacity - 1))] != NULL) {
+            __map_node *node = map->tab[i];
+            if (hash == node->hash && (key == node->key || map->equals(key, node->key))) {
+                map->tab[i] = node->next;
+                free(node);
+            } else {
+                __map_node *next;
+                while ((next = node->next) != NULL) {
+                    if (hash == next->hash && (key == next->key || map->equals(key, next->key))) {
+                        node->next = next->next;
+                        free(next);
+                        break;
+                    }
+                    node = next;
+                }
+            }
+        }
+    }
+}
+
 void map_print(map *map, char *(key_to_string)(char *, const void *), char *(value_to_string)(char *, const void *)) {
     for (size_t i = 0; i < map->capacity; i++) {
         printf("%4zu : ", i);
