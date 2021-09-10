@@ -6,24 +6,24 @@
 #include "../stack/Stack.h"
 
 void __test_new_stack() {
-    stack *stk = new_stack();
-    if (stk)
-        printf("stack address ==> %p", stk);
+    stack *q = new_stack();
+    if (q)
+        printf("stack address ==> %p", q);
 }
 
 void __test_stack_operator() {
-    stack *stk = new_stack();
+    stack *q = new_stack();
     int *a[10];
     for (int i = 0; i < 10; i++) {
         a[i] = malloc(sizeof(int));
         *a[i] = i;
-        stack_push(stk, a[i]);
+        stack_push(q, a[i]);
     }
-    printf("push [0, 9] top = %d size = %d\n", *(int *)stack_top(stk), stack_size(stk));
+    printf("push [0, 9] top = %d size = %d\n", *(int *)stack_top(q), stack_size(q));
 
     printf("pop all ==> ");
-    while (!stack_empty(stk)) {
-        printf("%d ", *(int *) stack_pop(stk));
+    while (!stack_empty(q)) {
+        printf("%d ", *(int *) queue_pop(q));
     }
 }
 

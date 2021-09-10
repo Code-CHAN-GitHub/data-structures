@@ -102,9 +102,9 @@ void __test_bs_tree_contain() {
     }
 }
 
-int main() {
-//    __test_new_bs_tree();
-//    __test_bs_tree_push();
-//    __test_bs_tree_remove();
-    __test_bs_tree_contain();
-}
+//int main() {
+////    __test_new_bs_tree();
+////    __test_bs_tree_push();
+////    __test_bs_tree_remove();
+////    __test_bs_tree_contain();
+//}

@@ -7,18 +7,18 @@
 #include <time.h>
 #include "../heap/Heap.h"
 
-int __int_compare(const void *a, const void *b) {
+int __int_compare0(const void *a, const void *b) {
     return (*(int *)a) - (*(int*)b);
 }
 
 void __test_new_heap() {
-    heap *heap = new_heap(__int_compare);
+    heap *heap = new_heap(__int_compare0);
     if (heap)
         printf("heap address ==> %p", heap);
 }
 
 void __test_heap_operator() {
-    heap *heap = new_heap(__int_compare);
+    heap *heap = new_heap(__int_compare0);
     int **a;
     a = malloc(sizeof(int *) * 10);
     srand((unsigned ) time(NULL));
@@ -44,7 +44,7 @@ void __test_heap_operator() {
     printf("pop ==> %d\n", *(int *) heap_pop(heap));
 }
 
-int main() {
-//    __test_new_heap();
-    __test_heap_operator();
-}
+//int main() {
+////    __test_new_heap();
+////    __test_heap_operator();
+//}

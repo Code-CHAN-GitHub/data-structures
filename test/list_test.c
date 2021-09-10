@@ -12,7 +12,7 @@ void __test_new_list() {
 }
 
 /*
- *
+ * 创建一个含有 [start, end] 的链表
  */
 list *__create_list(int start, int end) {
     list *l = new_list();
@@ -157,12 +157,12 @@ void __test_list_err() {
     printf("front ==> %s back ==> %s\n", list_front(l) == NULL ? "NULL" : "not null", list_back(l) == NULL ? "NULL" : "not null");
 }
 
-int main() {
-//    __test_new_list();
-//    __test_list_push();
-//    __test_list_pop();
-//    __test_list_insert();
-//    __test_list_set();
-//    __test_list_remove();
-    __test_list_err();
-}
+//int main() {
+////    __test_new_list();
+////    __test_list_push();
+////    __test_list_pop();
+////    __test_list_insert();
+////    __test_list_set();
+////    __test_list_remove();
+////    __test_list_err();
+//}

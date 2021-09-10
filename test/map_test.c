@@ -66,7 +66,7 @@ void __test_map_put() {
     map_print(map, __void_to_str, __void_to_str);
 }
 
-int main() {
-//    __test_new_map();
-    __test_map_put();
-}
+//int main() {
+////    __test_new_map();
+//    __test_map_put();
+//}
