@@ -27,10 +27,10 @@ void *media3(void **arr, size_t left, size_t right, int (*compare)(void *, void 
 
 #define CUTOFF (8) /* 插入排序截止范围 */
 
-void quickSortHelper(void **arr, size_t left, size_t right, int (*compare)(void *, void *)) {
+void __quick_sort_helper(void **arr, size_t left, size_t right, int (*compare)(void *, void *)) {
     /* 如果长度小于 CUTOFF 则使用插入排序 */
     if (left + CUTOFF > right) {
-        insertionSort(arr + left, right - left + 1, compare);
+        insertion_sort(arr + left, right - left + 1, compare);
         return;
     }
 
@@ -46,22 +46,22 @@ void quickSortHelper(void **arr, size_t left, size_t right, int (*compare)(void 
     /* restore pivot */
     swap(arr, i, right - 1);
 
-    quickSortHelper(arr, left, i - 1, compare);
-    quickSortHelper(arr, i + 1, right, compare);
+    __quick_sort_helper(arr, left, i - 1, compare);
+    __quick_sort_helper(arr, i + 1, right, compare);
 }
 
-void quickSort(void **base, size_t nitems, int (*compar)(void *, void *)) {
-    quickSortHelper(base, 0, nitems - 1, compar);
+void quick_sort(void **base, size_t nitems, int (*compar)(void *, void *)) {
+    __quick_sort_helper(base, 0, nitems - 1, compar);
 }
 
-void mergeSortHelper(void **arr, void **tmpArr, size_t left, size_t right, int(*compar)(void *, void *)) {
+void __merge_sort_helper(void **arr, void **tmpArr, size_t left, size_t right, int(*compar)(void *, void *)) {
     if (left >= right)
         return;
 
     /* divide */
     size_t mid = left + ((right - left) >> 1);
-    mergeSortHelper(arr, tmpArr, left, mid, compar);
-    mergeSortHelper(arr, tmpArr, mid + 1, right, compar);
+    __merge_sort_helper(arr, tmpArr, left, mid, compar);
+    __merge_sort_helper(arr, tmpArr, mid + 1, right, compar);
 
     /* merge */
     size_t i = left, j = mid + 1, k = 0;
@@ -79,14 +79,14 @@ void mergeSortHelper(void **arr, void **tmpArr, size_t left, size_t right, int(*
         arr[ii + left] = tmpArr[ii];
 }
 
-void mergeSort(void **base, size_t nitems, int(*compar)(void *, void *)) {
+void merge_sort(void **base, size_t nitems, int(*compar)(void *, void *)) {
     void **tmp = (void **) malloc(sizeof(void *) * nitems);
-    mergeSortHelper(base, tmp, 0, nitems - 1, compar);
+    __merge_sort_helper(base, tmp, 0, nitems - 1, compar);
     free(tmp);
 }
 
 
-void insertionSort(void **base, size_t nitems, int (*compar)(void *, void *)){
+void insertion_sort(void **base, size_t nitems, int (*compar)(void *, void *)){
     for (size_t i = 1; i < nitems; i++) {
         size_t j;
         void *tmp = base[i];
@@ -99,24 +99,24 @@ void insertionSort(void **base, size_t nitems, int (*compar)(void *, void *)){
     }
 }
 
-Vector *getHibbardStepVec(size_t nitems) {
-    Vector *vec = createVector();
+vector *__hibbard_step_vec(size_t nitems) {
+    vector *vec = new_vector();
     size_t i = 1;
     while (1) {
         size_t *x = malloc(sizeof(size_t));
         *x = (1 << i) - 1;
         if (*x >= nitems)
             break;
-        vectorAdd(vec, x);
+        vector_push_back(vec, x);
         i++;
     }
     return vec;
 }
 
-void shellSort(void **base, size_t nitems, int (*compare)(void *, void *)) {
-    Vector *stepVec = getHibbardStepVec(nitems);
-    for (size_t k = vectorSize(stepVec) - 1; ; k--) {
-        size_t increment = *(size_t *) vectorGet(stepVec, k);
+void shell_sort(void **base, size_t nitems, int (*compare)(void *, void *)) {
+    vector *stepVec = __hibbard_step_vec(nitems);
+    while (!vector_empty(stepVec)) {
+        size_t increment = *(size_t *) vector_pop_back(stepVec);
         for (size_t i = increment; i <= nitems - 1; i += increment) {
             size_t j;
             void *tmp = base[i];
@@ -124,13 +124,11 @@ void shellSort(void **base, size_t nitems, int (*compare)(void *, void *)) {
                 base[j] = base[j - increment];
             base[j] = tmp;
         }
-        if (k == 0)
-            break;
     }
     free(stepVec);
 }
 
-void shiftDown(void **arr, size_t i, size_t n, int (*compare)(void *, void *)) {
+void __shift_down(void **arr, size_t i, size_t n, int (*compare)(void *, void *)) {
     void *tmp = arr[i];
     size_t child;
     for (; i * 2 + 1 < n; i = child) {
@@ -144,10 +142,10 @@ void shiftDown(void **arr, size_t i, size_t n, int (*compare)(void *, void *)) {
     arr[i] = tmp;
 }
 
-void heapSort(void **base, size_t nitems, int (*compare)(void *, void *)) {
+void heap_sort(void **base, size_t nitems, int (*compare)(void *, void *)) {
     size_t i;
     for (i = nitems / 2; ; i--) { /* build heap */
-        shiftDown(base, i, nitems, compare);
+        __shift_down(base, i, nitems, compare);
         /* 注意 size_t 类型无符号 */
         if (i == 0)
             break;
@@ -155,6 +153,6 @@ void heapSort(void **base, size_t nitems, int (*compare)(void *, void *)) {
     for (i = nitems - 1; i > 0; i--) {
         /* 将堆顶元素移到尾部 */
         swap(base, 0, i);
-        shiftDown(base, 0, i, compare);
+        __shift_down(base, 0, i, compare);
     }
 }

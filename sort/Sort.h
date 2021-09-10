@@ -15,29 +15,25 @@ typedef int ElementType;
 /**
  * 快速排序
  */
-void quickSort(void **base, size_t nitems, int (*compar)(void *, void *));
+void quick_sort(void **base, size_t nitems, int (*compar)(void *, void *));
 
 /**
  * 归并排序
  */
-//void mergeSort(ElementType *arr, int left, int right);
-void mergeSort(void **base, size_t nitems, int(*compar)(void *, void *));
+void merge_sort(void **base, size_t nitems, int(*compar)(void *, void *));
 
 /**
  * 插入排序
  */
-//void insertionSort(ElementType *arr, int left, int right);
-void insertionSort(void **base, size_t nitems, int (*compar)(void *, void *));
+void insertion_sort(void **base, size_t nitems, int (*compar)(void *, void *));
 
 /**
  * 希尔排序
  */
-//void shellSort(ElementType *arr, int left, int right);
-void shellSort(void **base, size_t nitems, int (*compare)(void *, void *));
+void shell_sort(void **base, size_t nitems, int (*compare)(void *, void *));
 
 /*
  * 堆排序
  */
-//void heapSort(ElementType *arr, int n);
-void heapSort(void **base, size_t nitems, int (*compare)(void *, void *));
+void heap_sort(void **base, size_t nitems, int (*compare)(void *, void *));
 #endif //DATA_STRUCTURES_SORT_H
